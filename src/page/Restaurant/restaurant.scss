@@ -1,0 +1,54 @@
+@use '../../scss/' as *;
+.Restaurant{
+    position: relative;
+    .Restaurant_food{
+        @include screen_mobile(){
+        }
+        .foodItem_img{
+            @include screen_mobile(){
+                text-align: right;
+            }
+        }
+
+        .foodItem_title{
+            @include screen_mobile(){
+                display: flex;
+                justify-content: space-between;
+                font-size: 25px;
+            }
+
+            &_icon{
+                @include screen_mobile(){
+                    span{
+                        margin-right: 10px;
+
+                    }
+                }
+            }
+        }
+    }
+
+    .Restaurant_owner{
+        @include screen_mobile(){
+            margin-top: 30px;
+        }
+        .food_wrapper{
+            .foodItem_img{
+                @include screen_mobile(){
+                    position: relative;
+                }
+
+                .foodItem_img_add{
+                    @include screen_mobile(){
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        width: 28px;
+                        height: 28px;
+                    }
+                }
+
+            }
+        }
+    }
+}

@@ -1,0 +1,71 @@
+@use "../../scss/" as *;
+
+.FoodItem {
+  .Food_title{
+    @include screen_mobile(){
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px;
+    }
+  }
+  .FoodItem_block {
+    @include screen_mobile() {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+
+    .FoodItem_wrapper {
+      @include screen_mobile() {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        background-color: $bg-color-item;
+        margin: 10px 0;
+        padding: 10px 0 0 10px;
+        width: calc(50% - 10px); /* Chia đôi trên mobile (trừ margin) */
+        border-radius: 18px;
+        overflow: hidden;
+        &:nth-child(odd) {
+          margin-right: 10px;
+        }
+      }
+
+      .FoodItem_content{
+        display: flex;
+        flex-direction: column;
+        .foodItem_name {
+        }
+  
+        .foodItem_price {
+          @include screen_mobile() {
+            font-size: 12px;
+          }
+          font-size: 14px;
+        }
+
+      }
+
+      .foodItem_img {
+        text-align: end;
+        @include screen_mobile() {
+          img {
+            width: 120px;
+          }
+        }
+      }
+
+    }
+
+    @include screen_mobile() {
+      & > .FoodItem_wrapper:last-child:nth-child(odd) {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-evenly;
+        .FoodItem_content{
+          margin-right: 20px;
+        }
+      } 
+    }
+  }
+}

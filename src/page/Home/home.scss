@@ -1,0 +1,10 @@
+@use "../../scss/" as *;
+
+.Home {
+    height: 100%;
+    .Home_title {
+        @include screen_mobile {
+            padding: 45px 20px;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+@use "../../scss/" as *;
+
+.HeaderNavBar{
+    .container{
+        .nav_item{
+            @include screen_mobile{
+                display: flex;
+                flex-direction: column;
+                font-size: 14px;
+                padding: 0 20px;
+            }
+        }
+    }
+}

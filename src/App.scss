@@ -1,0 +1,58 @@
+@use "./scss/" as *;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.Block_header_container {
+  padding: 4% 20px !important;
+}
+
+.Page_container {
+  width: 100%;
+  height: 100%;
+}
+
+.fs-small {
+  font-size: 14px;
+}
+
+.fs-title {
+  font-size: 24px;
+}
+
+
+
+.color-white-blur {
+  color: rgba($color: #767676, $alpha: 1);
+}
+
+.bg_main {
+  background-color: rgba(182, 181, 173, 0.5);
+  min-height: 100vh;
+  @include screen_mobile(){
+      padding: 0 20px;
+  }
+}
+
+
+.style_icon_add{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include screen_mobile(){
+    background-color: #3f8e2e;
+    padding: 10px;
+    border-radius: 50%;
+    max-width: 38px;
+  }
+
+}
