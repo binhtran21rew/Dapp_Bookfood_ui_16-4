@@ -1,0 +1,38 @@
+@use '../../scss/' as *;
+
+.Order{
+    &:not(:first-child){
+        margin-top: 5px;
+    }
+    background-color: $bg-color-white;
+    @include screen_mobile(){
+        padding: 0 20px;
+    }
+    .Order_cart{
+        .cart_wrapper_item{
+            @include screen_mobile(){
+                margin: 20px 0;
+            }
+            .cart_item_img{
+                @include screen_mobile(){
+                    @include width(20%);
+                }
+            }
+
+
+        }
+    }
+
+    .cart_item_text{
+        @include screen_mobile(){
+            font-size: 14px;
+        }
+    }
+
+    .cart_item_quantity{
+        min-width: 60px;
+        background-color: $bg-color-white;
+        border-radius: 18px;
+    }
+
+}

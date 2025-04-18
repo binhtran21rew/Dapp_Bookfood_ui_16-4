@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { data, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import numeral from 'numeral';
 import 'numeral/locales/vi';
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
 import services from "../../utils/services";
 import Icons from '../../utils/Icon';
@@ -10,13 +14,24 @@ import "./restaurant.scss";
 import { span } from "framer-motion/client";
 import Icon from "../../utils/Icon";
 import Popup from "../../cpns/Popup/Popup";
+import { t } from "i18next";
+import { Links } from "../../utils/constant";
+
+import { addOrderData } from "../../context/slice/orderSlice";
+import BtnConfirm from "../../cpns/BtnConfirm/BtnConfirm";
+
+gsap.registerPlugin(ScrollTrigger);
 
 
 function Restaurant() {
     const location = useLocation();
     const navigate = useNavigate();
+    var orderSelector = useSelector((state) => state.order);
+    const dispatch = useDispatch();
     const { food } = location.state || {};
     const { id } = useParams();
+
+    const foodRef = useRef(null);
 
     const [restaurants, setRestaurants] = useState([]);
     const [foodRestaurant, setFoodRestaurant] = useState([]);
@@ -27,18 +42,45 @@ function Restaurant() {
     const [cart, setCart] = useState([]);
     const [quantities, setQuantities] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
+    const [totalOrder, setTotalOrder] = useState(0);
+    const [rating, setRating] = useState(0);
 
     const [width, setWidth] = useState(window.innerWidth);
 
+    useGSAP(() => {
+      if(width > 420) return;
+      const foodCurrent = foodRef.current;
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: foodCurrent,
+          start: "10% top",
+          end: "10% top",
+          toggleActions: "play none reverse none",
+          markers: true
+        },
+      });
+
+
+      tl.to(foodCurrent, {
+        duration: .5,
+        scale: 0.8,
+        y: -50,
+        ease: "power2.out"
+      })
+
+    }, [])
+
+    
     useEffect(() => {
-        if (!food) {
-            navigate("/");
-        }
+      if (!food) {
+        navigate("/");
+        return;
+      }
 
         setTotalStars(Number(food.totalStars));
         setTotalRatings(Number(food.totalRatings));
         setAverageRating(totalRatings > 0 ?  (totalStars / totalRatings).toFixed(1) : null )
-    }, [food]);
+    }, [food, navigate, totalRatings, totalStars]);
 
     useEffect(() => {
         const getData = async () => {
@@ -60,7 +102,10 @@ function Restaurant() {
               img: `https://gateway.pinata.cloud/ipfs/${food.img}`
             }));
             
-
+            const rating = formatDataFood.reduce((sum, item) => sum + Number(item.totalRatings.toString()), 0);
+            console.log(rating,'aa');
+            
+            setRating(rating);
             setFoodRestaurant(formatDataFood);
             setRestaurants(resOwnerRes);
         };
@@ -70,83 +115,59 @@ function Restaurant() {
 
     const handleBuy = (item) => {
         setPopup(true);
-        if (!quantities[item.id] || quantities[item.id] <= 0) {
-          quantities[item.id] = 1;
-        }
-
-        
-        setCart((prevCart) => {
-          const existingItem = prevCart.find((food) => food.id === item.id);
-          if (existingItem) {
-            return prevCart.map((food) =>
-              food.id === item.id ? { ...food, quantity: quantities[item.id] } : food
-            );
-          } else {
-            return [...prevCart, { ...item, quantity: quantities[item.id] }];
-          }
-        });
+        dispatch(addOrderData({ ...item, idRes: id }));
     }
 
+
     useEffect(() => {
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      if(orderSelector.data.length === 0) return;
+      const total = orderSelector.data.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const order = orderSelector.data.reduce((sum, item) => sum + item.quantity, 0);
+
+      setTotalOrder(order);
       setTotalPrice(total);
-    }, [cart]);
+    }, [orderSelector.data]);
 
-    console.log(cart);
+
+    
+    console.log(foodRestaurant);
     
     
-
-
     return (
         <div className="Restaurant">
-            {width <= 420 && popup && (
-              <div style={{
-                position: "fixed",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                height: 100,
-                backgroundColor: "white",
-                zIndex: 9999
-                
-              }}>
-                <Popup setIsOpen={setPopup}>
-                  <div className="d-flex justify-content-between" style={{
-                    backgroundColor: "rgb(18, 158, 0)",
-                    margin: "20px 20px",
-                    padding: 10,
-                    borderRadius: 28,
-                  }}>
-                    <div className="d-flex align-items-center">
+            {width <= 420 && orderSelector.data.length !== 0 && (
+              <div className="stylePopup-bottom" style={{padding: "10px 0"}}>
+
+                  <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(Links['orders'])}> 
+                    <div className="d-flex align-items-center" >
                       <span className="text-white fw-bold ms-3 fs-5">Giỏ hàng</span>
-                      <li className="text-white ms-3">{cart.length} món</li>
+                      <li className="text-white ms-3">{totalOrder} món</li>
                     </div>
                     <div className="text-white">{numeral(totalPrice).format('0,0 ')} vnd</div>
-                  </div>
-                </Popup>
+                  </BtnConfirm>
               </div>
             )}
-            <div className="Restaurant_food">
+            <div ref={foodRef} className="Restaurant_food" >
                 <div className="foodItem_img">
-                    <img src={food.img} alt={food.name} width={350} />
+                    <img src={food?.img} alt={food?.name} width={350} />
                 </div>
                 <div className="foodItem_title fw-bold text-capitalize">
-                    <span>{food.name}</span>
+                    <span>{food?.name}</span>
                     <div className="foodItem_title_icon">
-                      {food.isVegan &&
+                      {food?.isVegan &&
                         <span><Icons name="iconSeed" color="green"/></span>
                       }
-                      {!food.isGlutenFree &&
+                      {!food?.isGlutenFree &&
                         <span><Icons name="iconGluten" color="green"/></span>
                       }
-                      {food.isGlutenFree &&
+                      {food?.isGlutenFree &&
                         <span><Icons name="iconGluten" color="red"/></span>
                       }
                     </div>
                 </div>
                 <div>
                   <span className="text-uppercase">
-                    {numeral(food.price).format('0,0 ')} vnđ
+                    {numeral(food?.price).format('0,0 ')} vnđ
                   </span>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
@@ -159,6 +180,20 @@ function Restaurant() {
                   <div className="style_icon_add mx-2" onClick={() => handleBuy(food)}>
                     <Icon name="iconPlus" color="white" size="16"/>
                   </div>
+                </div>
+            </div>
+
+            <div className="restaurant row">
+                <div className="col-4">
+                  <img
+                      src={foodRestaurant[0]?.img}
+                      alt={foodRestaurant[0]?.name}
+                      width={"100%"}z
+                  />
+                </div>
+                <div className="col-8">
+                  <span className="text-capitalize text-truncate-2lines fw-bold">{restaurants.name} - Q{restaurants.district} - {restaurants.city}</span>
+                  <span>Điểm đánh giá: {rating}</span>
                 </div>
             </div>
 
@@ -181,8 +216,6 @@ function Restaurant() {
                       <span className="text-capitalize fw-bold">{data.name}</span>
                       <span className="text-capitalize fw-bold mt-2">{numeral(data.price).format('0,0 ')} vnđ</span>
                     </div>
-                    
-
                   </div>
                 ))}
               </div>

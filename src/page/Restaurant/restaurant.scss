@@ -1,8 +1,12 @@
 @use '../../scss/' as *;
 .Restaurant{
     position: relative;
+    @include screen_mobile(){
+        padding: 0 20px;
+    }
     .Restaurant_food{
         @include screen_mobile(){
+            padding: 50px 0;
         }
         .foodItem_img{
             @include screen_mobile(){
@@ -27,13 +31,24 @@
             }
         }
     }
-
-    .Restaurant_owner{
+    .restaurant{
         @include screen_mobile(){
-            margin-top: 30px;
+            background-color: $bg-color-white;
+            padding: 20px 0;
+            margin-bottom: 50px;
+            border-radius: 18px;
         }
+    }
+    .Restaurant_owner{
+
+        @include screen_mobile(){
+            padding: 0 0 100px;
+
+        }
+
         .food_wrapper{
             .foodItem_img{
+
                 @include screen_mobile(){
                     position: relative;
                 }

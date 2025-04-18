@@ -24,7 +24,6 @@ function AppRouter() {
             <Route  path={Links['categories']} element={<Loadpage><Categories /></Loadpage>} />
             <Route  path={Links['orders']} element={<Loadpage><Order /></Loadpage>} />
             <Route  path={`${Links['restaurant']}/:id`} element={<Loadpage><Restaurant /></Loadpage>} />
-
         </Route>
 
     </Routes>

@@ -1,11 +1,26 @@
-import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faPlus, faSearch, faSeedling, faWheatAwn } from '@fortawesome/free-solid-svg-icons'
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCartShopping,
+    faPlus,
+    faSearch,
+    faSeedling,
+    faWheatAwn,
+    faArrowLeft,
+    faMinus,
+    faMoneyBill,
+    faCreditCard,
+    faWallet,
+    faTicket
+} from "@fortawesome/free-solid-svg-icons";
 
 
 function Icon({...props}) {
     const {name, color, size} = props;
     switch(name){
+        case "iconTicket": return(
+            <FontAwesomeIcon icon={faTicket} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
         case "iconCart": return(
             <FontAwesomeIcon icon={faCartShopping} fontSize={size ?? 20} color={color ?? "black"}/>
         )
@@ -20,6 +35,21 @@ function Icon({...props}) {
         )
         case "iconGluten": return(
             <FontAwesomeIcon icon={faWheatAwn} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconArrowLeft": return(
+            <FontAwesomeIcon icon={faArrowLeft} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconMinus": return(
+            <FontAwesomeIcon icon={faMinus} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconCash": return(
+            <FontAwesomeIcon icon={faMoneyBill} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconCredit": return(
+            <FontAwesomeIcon icon={faCreditCard} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconWallet": return(
+            <FontAwesomeIcon icon={faWallet} fontSize={size ?? 20} color={color ?? "black"}/>
         )
         default: return(
             <></>
