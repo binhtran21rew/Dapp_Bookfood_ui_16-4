@@ -3,6 +3,8 @@ export const Links = {
     "categories": "/categories",
     "orders": "/orders",
     'restaurant': "/restaurant",
+    "carts": "/carts",
+    "orderDetail": "/orderDetail"
 }
 
 export const paymentOption = [

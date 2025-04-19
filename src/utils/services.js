@@ -2,7 +2,7 @@ import Web3 from "web3";
 import contractData from "../constract/Bookfood.json"
 
 const abi = contractData.abi;
-const contractAddress = "0xaf3624A7092cE6af97E486fF33cA15DAD0D5C3b0";
+const contractAddress = "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab";
 
 const initContract = async () => {
     const rpcURL = "http://127.0.0.1:8545"; // Ganache RPC
@@ -32,14 +32,14 @@ const sendTransaction = async (methodName, ...params) => {
         const gas = await method.estimateGas({ from: account.address });
 
         // Hoàn toàn dùng number
-        const gasWithBuffer = Math.floor(Number(gas) * 1.1);
+        const gasWithBuffer = Math.floor(Number(gas) * 1.5);
 
         const txData = await method.send({
             from: account.address,
             gas: gasWithBuffer,
         });
 
-        // console.log("Giao dịch thành công:", txData);
+        console.log("Giao dịch thành công:", txData);
         return txData;
     } catch (error) {
         console.error("Lỗi giao dịch:", error);

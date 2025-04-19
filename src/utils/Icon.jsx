@@ -11,13 +11,24 @@ import {
     faMoneyBill,
     faCreditCard,
     faWallet,
-    faTicket
+    faTicket,
+    faShop,
+    faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 
 function Icon({...props}) {
     const {name, color, size} = props;
     switch(name){
+        case "iconTimes": return(
+            <FontAwesomeIcon icon={faTimes} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconTimes": return(
+            <FontAwesomeIcon icon={faTimes} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
+        case "iconShop": return(
+            <FontAwesomeIcon icon={faShop} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
         case "iconTicket": return(
             <FontAwesomeIcon icon={faTicket} fontSize={size ?? 20} color={color ?? "black"}/>
         )

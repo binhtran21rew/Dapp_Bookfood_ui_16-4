@@ -24,10 +24,10 @@ function Home() {
           price: parseInt(food.price),
           isVegan: food.isVegan,
           isGlutenFree: food.isGlutenFree,
-          totalRatings: food.totalRatings,
-          totalStars: food.totalStars,
+          totalRatings: food.totalRatings.toString(),
+          totalStars: food.totalStars.toString(),
           restaurantId: food.restaurantId.toString(),
-          categoryId: food.categoryId,
+          categoryId: food.categoryId.toString(),
           img: `https://gateway.pinata.cloud/ipfs/${food.img}`
         }));
   

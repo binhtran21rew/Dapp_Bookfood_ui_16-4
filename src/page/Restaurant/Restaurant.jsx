@@ -20,7 +20,7 @@ import { Links } from "../../utils/constant";
 import { addOrderData } from "../../context/slice/orderSlice";
 import BtnConfirm from "../../cpns/BtnConfirm/BtnConfirm";
 
-gsap.registerPlugin(ScrollTrigger);
+// gsap.registerPlugin(ScrollTrigger);
 
 
 function Restaurant() {
@@ -30,7 +30,7 @@ function Restaurant() {
     const dispatch = useDispatch();
     const { food } = location.state || {};
     const { id } = useParams();
-
+  
     const foodRef = useRef(null);
 
     const [restaurants, setRestaurants] = useState([]);
@@ -47,28 +47,28 @@ function Restaurant() {
 
     const [width, setWidth] = useState(window.innerWidth);
 
-    useGSAP(() => {
-      if(width > 420) return;
-      const foodCurrent = foodRef.current;
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: foodCurrent,
-          start: "10% top",
-          end: "10% top",
-          toggleActions: "play none reverse none",
-          markers: true
-        },
-      });
+    // useGSAP(() => {
+    //   if(width > 420) return;
+    //   const foodCurrent = foodRef.current;
+    //   const tl = gsap.timeline({
+    //     scrollTrigger: {
+    //       trigger: foodCurrent,
+    //       start: "10% top",
+    //       end: "10% top",
+    //       toggleActions: "play none reverse none",
+    //       markers: true
+    //     },
+    //   });
 
 
-      tl.to(foodCurrent, {
-        duration: .5,
-        scale: 0.8,
-        y: -50,
-        ease: "power2.out"
-      })
+    //   tl.to(foodCurrent, {
+    //     duration: .5,
+    //     scale: 0.8,
+    //     y: -50,
+    //     ease: "power2.out"
+    //   })
 
-    }, [])
+    // }, [])
 
     
     useEffect(() => {
@@ -86,8 +86,8 @@ function Restaurant() {
         const getData = async () => {
             const resOwnerRes = await services.getRes(id);
             const resFood = await services.getAllFoods();
-
-            const filterFood = resFood.filter((data) => data.categoryId.toString() === id);
+            
+            const filterFood = resFood.filter((data) => data.restaurantId.toString() === id);
 
             const formatDataFood = filterFood.map((food) => ({
               id: food.id.toString(),
@@ -95,15 +95,14 @@ function Restaurant() {
               price: parseInt(food.price),
               isVegan: food.isVegan,
               isGlutenFree: food.isGlutenFree,
-              totalRatings: food.totalRatings,
-              totalStars: food.totalStars,
+              totalRatings: food.totalRatings.toString(),
+              totalStars: food.totalStars.toString(),
               restaurantId: food.restaurantId.toString(),
-              categoryId: food.categoryId,
+              categoryId: food.categoryId.toString(),
               img: `https://gateway.pinata.cloud/ipfs/${food.img}`
             }));
             
             const rating = formatDataFood.reduce((sum, item) => sum + Number(item.totalRatings.toString()), 0);
-            console.log(rating,'aa');
             
             setRating(rating);
             setFoodRestaurant(formatDataFood);
@@ -113,7 +112,7 @@ function Restaurant() {
         getData();
     }, [id]);
 
-    const handleBuy = (item) => {
+    const handleBuy = (item) => {      
         setPopup(true);
         dispatch(addOrderData({ ...item, idRes: id }));
     }
@@ -128,17 +127,14 @@ function Restaurant() {
       setTotalPrice(total);
     }, [orderSelector.data]);
 
-
-    
-    console.log(foodRestaurant);
     
     
     return (
         <div className="Restaurant">
-            {width <= 420 && orderSelector.data.length !== 0 && (
+            {width <= 420 && popup && orderSelector.data.length !== 0 && (
               <div className="stylePopup-bottom" style={{padding: "10px 0"}}>
 
-                  <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(Links['orders'])}> 
+                  <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(`${Links['orders']}/${id}`,)}> 
                     <div className="d-flex align-items-center" >
                       <span className="text-white fw-bold ms-3 fs-5">Giỏ hàng</span>
                       <li className="text-white ms-3">{totalOrder} món</li>
@@ -147,6 +143,15 @@ function Restaurant() {
                   </BtnConfirm>
               </div>
             )}
+            <div style={{
+              position: 'absolute',
+              top: "1%",
+              left: "5%"
+            }}>
+                <div className="col-1" onClick={() => navigate(-1)}>
+                    <Icon name="iconArrowLeft" size="20" />
+                </div>
+            </div>
             <div ref={foodRef} className="Restaurant_food" >
                 <div className="foodItem_img">
                     <img src={food?.img} alt={food?.name} width={350} />
@@ -188,7 +193,7 @@ function Restaurant() {
                   <img
                       src={foodRestaurant[0]?.img}
                       alt={foodRestaurant[0]?.name}
-                      width={"100%"}z
+                      width={"100%"}
                   />
                 </div>
                 <div className="col-8">

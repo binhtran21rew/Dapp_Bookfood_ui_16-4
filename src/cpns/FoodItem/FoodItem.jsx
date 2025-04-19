@@ -17,7 +17,6 @@ function arrSlice(arr,  blockSize){
 }
 function FoodItem({ ...props }) {
     const { listFood } = props;
-    const tepm = listFood;
     const navigate = useNavigate();
 
 
