@@ -108,7 +108,7 @@ function MainLayout() {
 		<div className={`bg_main`} style={{position: 'relative'}}>
 			<Outlet />
 			{!pageCart && !pageOrder && !pageOrderDetail &&(
-				<div className="styleSticky_topRight">
+				<div className="styleSticky_topRight" style={{top: "8%"}}>
 					<div className='styleCenter' onClick={() => navigate(Links['carts'])}>
 						<Icon name="iconCart" color="green"/>
 					</div>

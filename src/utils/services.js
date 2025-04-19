@@ -1,44 +1,41 @@
 import Web3 from "web3";
-import contractData from "../constract/Bookfood.json"
+import contractData from "../constract/Bookfood.json";
 
 const abi = contractData.abi;
-const contractAddress = "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab";
+const contractAddress = "0x4c4975060664fBdF1765bda2a8936ea20e92bCBC";
+const rpcURL = "http://127.0.0.1:8545"; // Ganache RPC
+const wsURL = "ws://127.0.0.1:8545"
+let web3Instance;
+let contractInstance;
+let accountInstance;
 
-const initContract = async () => {
-    const rpcURL = "http://127.0.0.1:8545"; // Ganache RPC
-
-    const web3 = new Web3(new Web3.providers.HttpProvider(rpcURL));
-
-    const privateKey = localStorage.getItem("privateKey");
-    if (!privateKey) {
-        throw new Error("Private Key chưa được nhập!");
+const initialize = async () => {
+    if (!web3Instance) {
+        // web3Instance = new Web3(new Web3.providers.HttpProvider(rpcURL));
+        web3Instance = new Web3(new Web3.providers.WebsocketProvider(wsURL));
+        
+        const privateKey = localStorage.getItem("privateKey");
+        if (!privateKey) {
+            throw new Error("Private Key chưa được nhập!");
+        }
+        accountInstance = web3Instance.eth.accounts.privateKeyToAccount(privateKey.startsWith("0x") ? privateKey : `0x${privateKey}`);
+        web3Instance.eth.accounts.wallet.add(accountInstance);
+        web3Instance.eth.defaultAccount = accountInstance.address;
+        contractInstance = new web3Instance.eth.Contract(abi, contractAddress);
     }
-
-    const account = web3.eth.accounts.privateKeyToAccount(privateKey.startsWith("0x") ? privateKey : `0x${privateKey}`);
-    web3.eth.accounts.wallet.add(account);
-    web3.eth.defaultAccount = account.address;
-
-    const contract = new web3.eth.Contract(abi, contractAddress);
-
-    return { web3, contract, account };
+    return { web3: web3Instance, contract: contractInstance, account: accountInstance };
 };
-
 
 const sendTransaction = async (methodName, ...params) => {
     try {
-        const { web3, contract, account } = await initContract();
+        const { web3, contract, account } = await initialize();
         const method = contract.methods[methodName](...params);
-
         const gas = await method.estimateGas({ from: account.address });
-
-        // Hoàn toàn dùng number
         const gasWithBuffer = Math.floor(Number(gas) * 1.5);
-
         const txData = await method.send({
             from: account.address,
             gas: gasWithBuffer,
         });
-
         console.log("Giao dịch thành công:", txData);
         return txData;
     } catch (error) {
@@ -47,10 +44,9 @@ const sendTransaction = async (methodName, ...params) => {
     }
 };
 
-
 const services = {
     getAllCategories: async () => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.getAllCategory().call();
         } catch (error) {
@@ -60,19 +56,17 @@ const services = {
     },
 
     getAllRestaurants: async () => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.getAllRestaurants().call();
-
         } catch (error) {
             console.error("Lỗi khi lấy danh sách nhà hàng:", error);
             return [];
         }
     },
 
-
     getOrder: async (id) => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.orders(id).call();
         } catch (error) {
@@ -82,7 +76,7 @@ const services = {
     },
 
     getRes: async (id) => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.restaurants(id).call();
         } catch (error) {
@@ -92,8 +86,7 @@ const services = {
     },
 
     getAllFoods: async () => {
-        const { contract } = await initContract();
-
+        const { contract } = await initialize();
         try {
             return await contract.methods.getAllFoods().call();
         } catch (error) {
@@ -103,9 +96,8 @@ const services = {
     },
 
     getManageOrders: async () => {
-        const { contract, account } = await initContract();
+        const { web3, contract, account } = await initialize();
         try {
-
             return await contract.methods.getAllOrders().call({ from: account.address });
         } catch (error) {
             console.error("Lỗi khi lấy danh sách đơn hàng:", error);
@@ -114,7 +106,7 @@ const services = {
     },
 
     getOrderHistory: async () => {
-        const { contract, account } = await initContract();
+        const { web3, contract, account } = await initialize();
         try {
             return await contract.methods.getOrdersBySender().call({ from: account.address });
         } catch (error) {
@@ -124,7 +116,7 @@ const services = {
     },
 
     getOrderDetail: async (id) => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.getOrderDetails(id).call();
         } catch (error) {
@@ -141,13 +133,12 @@ const services = {
         return sendTransaction("addRating", id, reviews, star);
     },
 
-
     createOrder: async (payment, _foodIds, _quantities, UsePoint, note) => {
         return sendTransaction("placeOrder", payment, _foodIds, _quantities, UsePoint, note);
     },
 
     searchFood: async (keyword) => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.searchFood(keyword).call();
         } catch (error) {
@@ -157,7 +148,7 @@ const services = {
     },
 
     searchRestaurants: async (keyword) => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.searchRestaurants(keyword).call();
         } catch (error) {
@@ -167,7 +158,7 @@ const services = {
     },
 
     getRatingByID: async (id) => {
-        const { contract } = await initContract();
+        const { contract } = await initialize();
         try {
             return await contract.methods.getRatingsForFood(id).call();
         } catch (error) {
@@ -175,7 +166,6 @@ const services = {
             return [];
         }
     },
-
 };
 
 export default services;

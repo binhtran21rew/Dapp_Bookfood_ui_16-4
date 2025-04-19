@@ -70,7 +70,7 @@ function Cart() {
       {orders.map((order, id) => (
               <tr key={id}>
                 <td>{order.id}</td>
-                <td>{order.discount.toLocaleString() === 0 ? order.discount.toLocaleString() : -order.discount.toLocaleString() }</td>
+                <td>{order.discount === 0 ? order.discount.toLocaleString() : order.discount.toLocaleString()}</td>
                 <td>{order.total.toLocaleString()}</td>
                 <td>
                   {order.payment == 0

@@ -10,4 +10,29 @@
             padding: 45px 20px;
         }
     }
+
+    .search{
+        position: relative;
+        input{
+            height: 40px;
+            border: none;
+            border-radius: 18px;
+            padding: 20px;
+
+            &:focus {
+                outline: none;
+            }
+        }
+        &_icon{
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 40px;
+            border-radius: 20px;
+        }
+    }
 }
