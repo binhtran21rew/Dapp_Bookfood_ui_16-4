@@ -6,7 +6,6 @@ import './cart.scss';
 import services from '../../utils/services';
 import validJson from '../../utils/validJson';
 import { data, useNavigate } from 'react-router-dom';
-import { Instagram } from 'lucide-react';
 import Icon from '../../utils/Icon';
 
 function Cart() {

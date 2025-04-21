@@ -16,16 +16,21 @@
     }
 
     .FoodItem_wrapper {
+      position: relative;
+      @include screen_laptop(){
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+      }
       @include screen_mobile() {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         background-color: $bg-color-item;
         margin: 10px 0;
-        padding: 10px 0 0 10px;
+        padding: 10px;
         width: calc(50% - 10px); /* Chia đôi trên mobile (trừ margin) */
         border-radius: 18px;
-        overflow: hidden;
         &:nth-child(odd) {
           margin-right: 10px;
         }
@@ -34,6 +39,11 @@
       .FoodItem_content{
         display: flex;
         flex-direction: column;
+
+        @include screen_laptop(){
+          margin-left: 20px;
+          justify-content: space-around;
+        }
         .foodItem_name {
         }
   
@@ -48,23 +58,42 @@
 
       .foodItem_img {
         text-align: end;
+        border-radius: 12px;
         @include screen_mobile() {
           img {
-            width: 120px;
+            width: 150px;
           }
         }
       }
-
+      .FoodItem_add{
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: -6px;
+        right: -6px;
+        z-index: 10;
+        div{
+          width: 26px;
+          height: 26px;
+        }
+      }
     }
 
     @include screen_mobile() {
       & > .FoodItem_wrapper:last-child:nth-child(odd) {
         flex-direction: row;
         width: 100%;
-        justify-content: space-evenly;
+        justify-content: space-around;
+        padding: 20px 10px;
         .FoodItem_content{
-          margin-right: 20px;
+          width: 80%;
         }
+        .foodItem_img{
+          text-align: center;
+          align-content: center;
+        }
+
       } 
     }
   }

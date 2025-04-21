@@ -23,11 +23,11 @@ const OrderSlice = createSlice({
 
         updateItemQuantity: (state, action) => {
           const { id, quantity } = action.payload;
-          const itemToUpdate = state.order.find(item => item.id === id);
+          // const itemToUpdate = state.order.find(item => item.id === id);
           
-          if (itemToUpdate) {
-            itemToUpdate.quantity = Math.max(1, quantity);
-          }
+          // if (itemToUpdate) {
+          //   itemToUpdate.quantity = Math.max(1, quantity);
+          // }
 
           const itemToUpdateInData = state.data.find(item => item.id === id);
           if (itemToUpdateInData) {
@@ -45,15 +45,16 @@ const OrderSlice = createSlice({
           }
         },
         placeOrder: (state, action) => {
-          const orderedItemIds = state.order.map(item => item.id);
-          state.data = state.data.filter(item => !orderedItemIds.includes(item.id));
-          state.order = [];
+          // const orderedItemIds = state.order.map(item => item.id);
+          // state.data = state.data.filter(item => !orderedItemIds.includes(item.id));
+          // state.order = [];
+          state.data = [];
         },
 
         getItemId: (state, action) => {
           const { id } = action.payload;
           
-          const foundItem = state.order.find(item => item.id === id);
+          const foundItem = state.data.find(item => item.id === id);
           
           if (foundItem) {
             state.item = foundItem; // Cập nhật state item với item tìm thấy
@@ -81,7 +82,7 @@ const OrderSlice = createSlice({
         removeOrderItem: (state, action) => {
           const { id } = action.payload;
     
-          state.order = state.order.filter(item => item.id !== id);
+          // state.order = state.order.filter(item => item.id !== id);
           state.data = state.data.filter(item => item.id !== id)
           state.note = state.note.filter(note => note.id !== id);
     

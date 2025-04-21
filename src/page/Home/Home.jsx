@@ -15,9 +15,7 @@ function Home() {
   const [listFood, setListFood] = useState([]);
 
 
-  const [foods, setFoods] = useState([]);
   const [temp, setTemp] = useState([]);
-  const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [minPrice, setMinPrice] = useState("");
@@ -32,17 +30,18 @@ function Home() {
     const getData = async () =>{ 
       try{
         const resFood = await services.getAllFoods();
+        
         const res = await services.getAllCategories();
         setCategories(res);
         const formatDataFood = resFood.map((food) => ({
           id: food.id.toString(),
           name: food.name,
+          detail: food.detail,
           price: parseInt(food.price),
           isVegan: food.isVegan,
           isGlutenFree: food.isGlutenFree,
           totalRatings: food.totalRatings.toString(),
           totalStars: food.totalStars.toString(),
-          restaurantId: food.restaurantId.toString(),
           categoryId: food.categoryId.toString(),
           img: `https://gateway.pinata.cloud/ipfs/${food.img}`
         }));
@@ -51,10 +50,45 @@ function Home() {
         setTemp(formatDataFood);
       }catch(err){
         console.log("Lỗi khi lấy danh sách món ăn:", err);
-        
       }
     }
     getData();
+  }, []);
+  console.log(listFood);
+  
+
+  useEffect(() => {
+    let foodEventSubscription;
+    const subscribeToFoodAdded = async () => {
+        foodEventSubscription = await services.listenForAddFood((food) => {
+            const formatDataFood = {
+                id: food.id.toString(),
+                name: food.name,
+                detail: food.detail,
+                price: parseInt(food.price),
+                isVegan: food.isVegan,
+                isGlutenFree: food.isGlutenFree,
+                totalRatings: food.totalRatings.toString(),
+                totalStars: food.totalStars.toString(),
+                categoryId: food.categoryId.toString(),
+                img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+            };
+            setListFood((prev) => {
+                if (!prev.find(item => item.id === formatDataFood.id)) {
+                    return [...prev, formatDataFood];
+                }
+                return prev;
+            });
+        });
+    };
+    subscribeToFoodAdded();
+    return () => {
+      if (foodEventSubscription && foodEventSubscription.removeAllListeners) {
+          foodEventSubscription.removeAllListeners('data');
+          foodEventSubscription.removeAllListeners('error');
+          console.log("Đã hủy đăng ký lắng nghe sự kiện FoodAdded.");
+      }
+  };
   }, []);
 
   const handleSearch = async () => {

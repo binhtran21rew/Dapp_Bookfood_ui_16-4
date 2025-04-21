@@ -29,77 +29,111 @@ function MainLayout() {
 
 	}, [orderSelector.data]);
 
-	useEffect(() => {
-		if(restaurantNumber.length === 0) return;
-		const getRes = async () => {
-			const res = await services.getAllRestaurants();
-			const filter = res.filter(item => restaurantNumber.includes(item.id.toString()));
+	// useEffect(() => {
+	// 	if(restaurantNumber.length === 0) return;
+	// 	const getRes = async () => {
+	// 		const res = await services.getAllRestaurants();
+	// 		const filter = res.filter(item => restaurantNumber.includes(item.id.toString()));
 
 			
-			setRestaurant(filter);
-		}
+	// 		setRestaurant(filter);
+	// 	}
 
-		getRes();
-	}, [restaurantNumber]);
+	// 	getRes();
+	// }, [restaurantNumber]);
 
+	useEffect(() => {
+		let orderEventSubscription;
+		const subscribeToOrderAdded = async () => {
+			orderEventSubscription = await services.listenForPlaceOrder((order) => {
+				console.log("listen order page chính:", order);
+				
+				// const formatDataFood = {
+				// 	id: food.id.toString(),
+				// 	name: food.name,
+				// 	detail: food.detail,
+				// 	price: parseInt(food.price),
+				// 	isVegan: food.isVegan,
+				// 	isGlutenFree: food.isGlutenFree,
+				// 	totalRatings: food.totalRatings.toString(),
+				// 	totalStars: food.totalStars.toString(),
+				// 	categoryId: food.categoryId.toString(),
+				// 	img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+				// };
+				// setListFood((prev) => {
+				// 	if (!prev.find(item => item.id === formatDataFood.id)) {
+				// 		return [...prev, formatDataFood];
+				// 	}
+				// 	return prev;
+				// });
+			});
+		};
+		subscribeToOrderAdded();
+		return () => {
+		  if (orderEventSubscription && orderEventSubscription.removeAllListeners) {
+			  orderEventSubscription.removeAllListeners('data');
+			  orderEventSubscription.removeAllListeners('error');
+			  console.log("Đã hủy đăng ký lắng nghe sự kiện OrderAdded.");
+		  }
+	  };
+	  }, []);
+	// const handleClick = (type, idRes) => {
+
+	// 	const currentRef = orderRef.current;
+	// 	const iconTime = currentRef.querySelector('.iconTime');
+	// 	const orderWrapper = currentRef.querySelector('.order_wrapper');
+	// 	const restaurant = currentRef.querySelector('.restaurant');
 	
-	const handleClick = (type, idRes) => {
+	// 	const tl = gsap.timeline();
 
-		const currentRef = orderRef.current;
-		const iconTime = currentRef.querySelector('.iconTime');
-		const orderWrapper = currentRef.querySelector('.order_wrapper');
-		const restaurant = currentRef.querySelector('.restaurant');
-	
-		const tl = gsap.timeline();
+	// 	if(type === "close"){
+	// 		setExpand(false);
+	// 		gsap.to(iconTime, {
+	// 			display: "none"
+	// 		})
+	// 		tl.to(restaurant, {
+	// 			display: 'none'
+	// 		})
+	// 		tl.to(currentRef, {
+	// 			right: "10%",
+	// 			width: "50px",
+	// 			height: "50px",
+	// 			borderRadius: "50%",
+	// 			bottom: "5%",
+	// 		})
+	// 		tl.to(orderWrapper, {
+	// 			display: "flex"
+	// 		})
+	// 	}
 
-		if(type === "close"){
-			setExpand(false);
-			gsap.to(iconTime, {
-				display: "none"
-			})
-			tl.to(restaurant, {
-				display: 'none'
-			})
-			tl.to(currentRef, {
-				right: "10%",
-				width: "50px",
-				height: "50px",
-				borderRadius: "50%",
-				bottom: "5%",
-			})
-			tl.to(orderWrapper, {
-				display: "flex"
-			})
-		}
+	// 	if(type === "open"){
+	// 		setExpand(true);
 
-		if(type === "open"){
-			setExpand(true);
+	// 		tl.to(orderWrapper,{
+	// 			display:"none"
+	// 		})
+	// 		tl.to(currentRef, {
+	// 			right: 0,
+	// 			bottom: 0,
+	// 			width: "100%",
+	// 			height: "500px",
+	// 			borderRadius: "unset"
+	// 		})
+	// 		tl.to(iconTime,{
+	// 			duration: 0.1,
+	// 			display:"block"
+	// 		})
+	// 		tl.to(restaurant, {
+	// 			duration: 0.1,
+	// 			display: 'block'
+	// 		})
+	// 	}
 
-			tl.to(orderWrapper,{
-				display:"none"
-			})
-			tl.to(currentRef, {
-				right: 0,
-				bottom: 0,
-				width: "100%",
-				height: "500px",
-				borderRadius: "unset"
-			})
-			tl.to(iconTime,{
-				duration: 0.1,
-				display:"block"
-			})
-			tl.to(restaurant, {
-				duration: 0.1,
-				display: 'block'
-			})
-		}
-
-		if(type === "item"){
-			navigate(`${Links['orders']}/${idRes}`);
-		}
+	// 	if(type === "item"){
+	// 		navigate(`${Links['orders']}/${idRes}`);
+	// 	}
 		
-	}
+	// }
 
 
 	
@@ -114,7 +148,7 @@ function MainLayout() {
 					</div>
 				</div>
 			)}
-			{orderSelector.data.length > 0 && !pageOrder &&(
+			{/* {orderSelector.data.length > 0 && !pageOrder &&(
 				<div ref={orderRef} className="styleSticky_bottomRight" >
 					<div className='iconTime' style={{
 						position: 'absolute',
@@ -162,7 +196,7 @@ function MainLayout() {
 					</div>
 
 				</div>
-			)} 
+			)}  */}
 
 		</div>
 	)

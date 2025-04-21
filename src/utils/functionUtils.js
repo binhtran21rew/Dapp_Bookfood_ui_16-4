@@ -1,3 +1,5 @@
+import {typeFood} from './constant';
+
 export default function capitalizeWords(str, wordsToCapitalize) {
     const words = str.split(' ');
     const capitalizedWords = words.map(word => {
@@ -18,4 +20,10 @@ export function checkIsDrink(chuoi) {
 export function checkIsVegetable(chuoi) {
     const regex = /rau/i;
     return regex.test(chuoi);
+}
+
+export function getFoodTypes(data) {
+    return Object.keys(typeFood)
+        .filter((key) => data[key])
+        .map((key) => typeFood[key]);
 }

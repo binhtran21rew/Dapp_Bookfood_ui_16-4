@@ -2,6 +2,9 @@
 
 .Home {
     height: 100%;
+    @include screen_laptop(){
+        padding: 50px;
+    }
     @include screen_mobile(){
         padding: 0 20px;
     }

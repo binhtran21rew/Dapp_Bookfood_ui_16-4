@@ -2,7 +2,7 @@ export const Links = {
     "home": "/",
     "categories": "/categories",
     "orders": "/orders",
-    'restaurant': "/restaurant",
+    'food': "/food",
     "carts": "/carts",
     "orderDetail": "/orderDetail"
 }
@@ -18,7 +18,6 @@ export const optionSize = [
     {label: "lớn", value: "L"},
     {label: "vừa", value: "M"},
     {label: "nhỏ", value: "S"},
-
 ]
 
 export const pageVariants = {
@@ -26,5 +25,12 @@ export const pageVariants = {
     animate: { opacity: 1 },
     exit: { opacity: 0 },
 };
+
+export const typeFood = {
+    isGlutenFree: "sản phẩm chứa gluten (tinh bột)",
+    isVegan: "thực phẩm chay"
+}
+
+
 
 export const foodContent = ['bạn sẽ thích', "thức ăn ngon"]

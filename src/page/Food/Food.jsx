@@ -10,12 +10,13 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import services from "../../utils/services";
 import Icons from '../../utils/Icon';
 
-import "./restaurant.scss";
+import "./food.scss";
 import { span } from "framer-motion/client";
 import Icon from "../../utils/Icon";
 import Popup from "../../cpns/Popup/Popup";
 import { t } from "i18next";
 import { Links } from "../../utils/constant";
+import {getFoodTypes} from '../../utils/functionUtils';
 
 import { addOrderData } from "../../context/slice/orderSlice";
 import BtnConfirm from "../../cpns/BtnConfirm/BtnConfirm";
@@ -23,13 +24,13 @@ import BtnConfirm from "../../cpns/BtnConfirm/BtnConfirm";
 // gsap.registerPlugin(ScrollTrigger);
 
 
-function Restaurant() {
+function Food() {
     const location = useLocation();
     const navigate = useNavigate();
     var orderSelector = useSelector((state) => state.order);
     const dispatch = useDispatch();
     const { food } = location.state || {};
-    const { id } = useParams();
+    // const { id } = useParams();
   
     const foodRef = useRef(null);
 
@@ -44,6 +45,7 @@ function Restaurant() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalOrder, setTotalOrder] = useState(0);
     const [rating, setRating] = useState(0);
+    const [typeFood, setTypeFood] = useState()
 
     const [width, setWidth] = useState(window.innerWidth);
 
@@ -69,54 +71,54 @@ function Restaurant() {
     //   })
 
     // }, [])
-
+  
     
     useEffect(() => {
       if (!food) {
         navigate("/");
         return;
       }
-
-        setTotalStars(Number(food.totalStars));
-        setTotalRatings(Number(food.totalRatings));
-        setAverageRating(totalRatings > 0 ?  (totalStars / totalRatings).toFixed(1) : null )
+      setTypeFood(getFoodTypes(food));
+      setTotalStars(Number(food.totalStars));
+      setTotalRatings(Number(food.totalRatings));
+      setAverageRating(totalRatings > 0 ?  (totalStars / totalRatings).toFixed(1) : null )
     }, [food, navigate, totalRatings, totalStars]);
 
-    useEffect(() => {
-        const getData = async () => {
-            const resOwnerRes = await services.getRes(id);
-            const resFood = await services.getAllFoods();
+    // useEffect(() => {
+    
+    //     const getData = async () => {
+    //         // const resOwnerRes = await services.getRes(id);
+    //         const resFood = await services.getAllFoods();
             
-            const filterFood = resFood.filter((data) => data.restaurantId.toString() === id);
+    //         // const filterFood = resFood.filter((data) => data.restaurantId.toString() === id);
 
-            const formatDataFood = filterFood.map((food) => ({
-              id: food.id.toString(),
-              name: food.name,
-              price: parseInt(food.price),
-              isVegan: food.isVegan,
-              isGlutenFree: food.isGlutenFree,
-              totalRatings: food.totalRatings.toString(),
-              totalStars: food.totalStars.toString(),
-              restaurantId: food.restaurantId.toString(),
-              categoryId: food.categoryId.toString(),
-              img: `https://gateway.pinata.cloud/ipfs/${food.img}`
-            }));
+    //         const formatDataFood = resFood.map((food) => ({
+    //           id: food.id.toString(),
+    //           name: food.name,
+    //           price: parseInt(food.price),
+    //           isVegan: food.isVegan,
+    //           isGlutenFree: food.isGlutenFree,
+    //           totalRatings: food.totalRatings.toString(),
+    //           totalStars: food.totalStars.toString(),
+    //           categoryId: food.categoryId.toString(),
+    //           img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+    //         }));
             
-            const rating = formatDataFood.reduce((sum, item) => sum + Number(item.totalRatings.toString()), 0);
+    //         const rating = formatDataFood.reduce((sum, item) => sum + Number(item.totalRatings.toString()), 0);
             
-            setRating(rating);
-            setFoodRestaurant(formatDataFood);
-            setRestaurants(resOwnerRes);
-        };
+    //         setRating(rating);
+    //         setFoodRestaurant(formatDataFood);
+    //         // setRestaurants(resOwnerRes);
+    //     };
 
-        getData();
-    }, [id]);
+    //     getData();
+    // }, [food]);
 
     const handleBuy = (item) => {      
         setPopup(true);
-        dispatch(addOrderData({ ...item, idRes: id }));
+        dispatch(addOrderData({ ...item}));
     }
-
+    
 
     useEffect(() => {
       if(orderSelector.data.length === 0) return;
@@ -133,14 +135,13 @@ function Restaurant() {
         <div className="Restaurant">
             {width <= 420 && popup && orderSelector.data.length !== 0 && (
               <div className="stylePopup-bottom" style={{padding: "10px 0"}}>
-
-                  <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(`${Links['orders']}/${id}`,)}> 
-                    <div className="d-flex align-items-center" >
-                      <span className="text-white fw-bold ms-3 fs-5">Giỏ hàng</span>
-                      <li className="text-white ms-3">{totalOrder} món</li>
-                    </div>
-                    <div className="text-white">{numeral(totalPrice).format('0,0 ')} vnd</div>
-                  </BtnConfirm>
+                <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
+                  <div className="d-flex align-items-center" >
+                    <span className="text-white fw-bold fs-5">Giỏ hàng</span>
+                    <li className="text-white ms-3">{totalOrder} món</li>
+                  </div>
+                  <div className="text-white">{numeral(totalPrice).format('0,0 ')} vnd</div>
+                </BtnConfirm>
               </div>
             )}
             <div style={{
@@ -153,8 +154,9 @@ function Restaurant() {
                 </div>
             </div>
             <div ref={foodRef} className="Restaurant_food" >
+              <div className="food_container">
                 <div className="foodItem_img">
-                    <img src={food?.img} alt={food?.name} width={350} />
+                    <img src={food?.img} alt={food?.name} width={"100%"} />
                 </div>
                 <div className="foodItem_title fw-bold text-capitalize">
                     <span>{food?.name}</span>
@@ -186,9 +188,27 @@ function Restaurant() {
                     <Icon name="iconPlus" color="white" size="16"/>
                   </div>
                 </div>
+
+                <div className="mt-3">
+                  <span className="fw-bold">Mô tả món ăn:</span> <br/>
+                  <div className="mt-2"/>
+                  <span>{food?.detail}</span>
+                </div>
+                <div className="mt-3">
+                  <span className="fw-bold">Chú thích:</span>
+                  <ul>
+                    {typeFood?.map((data, id) => (
+                      <li key={id}>{data}</li>
+                    ))}
+                  </ul>
+                  {/* <li>{getFoodTypes(food?.isGlutenFree)}</li>
+                  <li>{getFoodTypes(food?.isVegan)}</li> */}
+
+                </div>
+              </div>
             </div>
 
-            <div className="restaurant row">
+            {/* <div className="restaurant row">
                 <div className="col-4">
                   <img
                       src={foodRestaurant[0]?.img}
@@ -200,9 +220,9 @@ function Restaurant() {
                   <span className="text-capitalize text-truncate-2lines fw-bold">{restaurants.name} - Q{restaurants.district} - {restaurants.city}</span>
                   <span>Điểm đánh giá: {rating}</span>
                 </div>
-            </div>
+            </div> */}
 
-            <div className="Restaurant_owner">
+            {/* <div className="Restaurant_owner">
               <span className="fs-4 text-capitalize fw-bold">Dành cho bạn</span>
               <div className="row food_wrapper">
                 {foodRestaurant.map((data, id) => (
@@ -224,9 +244,9 @@ function Restaurant() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
         </div>
     );
 }
 
-export default Restaurant;
+export default Food;
