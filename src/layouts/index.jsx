@@ -31,12 +31,26 @@ function MainLayout() {
 	const [restaurantNumber, setRestaurantNumber ] = useState([]);
 	const [restaurant, setRestaurant] = useState([]);
 	const [expand, setExpand] = useState(false);
+    const [width, setWidth] = useState(window.innerWidth);
 
+    useEffect(() => {
+      const handleResize = () => {
+        setWidth(window.innerWidth);
+      };
+  
+      // Thêm event listener để lắng nghe sự kiện resize
+      window.addEventListener('resize', handleResize);
+  
+      // Cleanup function: loại bỏ event listener khi component unmount
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []); 
 
-	useEffect(() => {
-		window.scrollTo(0, 0);
+	// useEffect(() => {
+	// 	window.scrollTo(0, 0);
 
-	}, []);
+	// }, []);
 
 	useEffect(() => {
 		if(orderSelector.data.length === 0 ) return;
@@ -134,8 +148,8 @@ function MainLayout() {
 	
 	
 	return (
-		<div className={`bg_main`} style={{position: 'relative'}}>
-			<Outlet />
+		<div className={``} style={{position: 'relative'}}>
+			<Outlet context={{width}}/>
 			<div className="grid place-items-center h-dvh bg-zinc-900/15">
 				<ToastContainer />
 			</div>

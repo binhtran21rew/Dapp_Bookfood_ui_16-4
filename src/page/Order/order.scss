@@ -2,12 +2,24 @@
 
 .Order{
     .popup_order{
-        img{
-            position: absolute;
-            top: -5%;
+        min-height: 100vh;
+        .popup_order_image{
+            
+            img{
+                width: 500px;
+                height: 500px;
+            }
+
         }
-        :nth-child(2){
-            top: 35%;
+        .popup_order_option{
+            padding: 50px   ;
+            box-shadow: 0 0 10px rgb(220, 220, 220);
+
+            .text-label{
+                font-size: 16px;
+                font-weight: bold;
+                text-transform: capitalize;
+            }
             @include screen_mobile(){
                 top: 25%;
             }
@@ -47,7 +59,7 @@
                 }
                 .cart_item_img{
                     @include screen_laptop(){
-                        @include width(8%);
+                        @include width(10%);
                     }
                     @include screen_tablet(){
                         @include width(15%);
@@ -66,10 +78,10 @@
     
         .cart_item_text{
             @include screen_laptop(){
-                font-size: 14px;
+                font-size: 18px;
             }
             @include screen_tablet(){
-                font-size: 14px;
+                font-size: 16px;
 
             }
             @include screen_mobile(){

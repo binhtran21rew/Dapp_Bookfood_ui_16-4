@@ -47,16 +47,30 @@
                 padding: 20px 30px;
 
             }
+            .text-label{
+                // font-weight: bold;
+                text-transform: capitalize;
+                font-size: 16px;
+
+                @include screen_laptop(){
+                    font-size: 18px;
+                }
+            }
 
             .btnFood{
                 position: absolute;
                 bottom: 4%;
-                right: 2%;
+                right: 8%;
+
+            
+                @include screen_mobile(){
+
+                }
             }
 
         }
         @include screen_mobile(){
-            padding: 50px 0;
+            // padding: 50px 0;
         }
         .foodItem_img{
             @include screen_tablet(){

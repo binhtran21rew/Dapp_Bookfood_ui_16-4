@@ -55,6 +55,20 @@ function Food() {
 
     const [width, setWidth] = useState(window.innerWidth);
 
+    useEffect(() => {
+      const handleResize = () => {
+        setWidth(window.innerWidth);
+      };
+  
+      // Thêm event listener để lắng nghe sự kiện resize
+      window.addEventListener('resize', handleResize);
+  
+      // Cleanup function: loại bỏ event listener khi component unmount
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []); 
+
     // useGSAP(() => {
     //   if(width > 420) return;
     //   const foodCurrent = foodRef.current;
@@ -108,10 +122,9 @@ function Food() {
     }, [popup]);
 
     useEffect(() => {
-      if(orderSelector.data.length === 0) return;
       const total = orderSelector.data.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const order = orderSelector.data.reduce((sum, item) => sum + item.quantity, 0);
-
+      
       setTotalOrder(order);
       setTotalPrice(total);
     }, [orderSelector.data]);
@@ -158,7 +171,7 @@ function Food() {
       const cartUpdate = orderSelector.data.find(item => item.id === id);
       
       if(!cartUpdate) {
-        if(type === "in"){
+        if(type === "in"){          
           setPopup(true);
           dispatch(addOrderData({ ...food}));
         }
@@ -167,7 +180,8 @@ function Food() {
       };
 
       let newQuantity = cartUpdate.quantity;
-      console.log(newQuantity);
+      console.log(123);
+      
       
       if(type === 'de'){
         newQuantity = Math.max(0, newQuantity - 1);
@@ -182,7 +196,7 @@ function Food() {
     
     return (
         <div className="Restaurant">
-            {popup && orderSelector.data.length !== 0 && (
+            {/* { width > 634 && popup && orderSelector.data.length !== 0 && (
               <div ref={btnRef} className="stylePopup-bottom" style={{padding: "10px 0"}}>
                 <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
                   <div className="d-flex align-items-center" >
@@ -192,14 +206,15 @@ function Food() {
                   <div className="text-white">{numeral(totalPrice).format('0,0 ')} vnd</div>
                 </BtnConfirm>
               </div>
-            )}
+            )} */}
             <div style={{
               position: 'absolute',
               top: "1%",
-              left: "5%"
+              left: "5%",
+              zIndex: 9
             }}>
                 <div className="col-1" onClick={() => navigate(Links["home"])}>
-                  <BtnBack />
+                  <BtnBack color="rgb(183, 183, 183)"/>
                 </div>
             </div>
             <div ref={foodRef} className="Restaurant_food" >
@@ -222,17 +237,11 @@ function Food() {
                         }
                       </div>
                   </div>
-                  <div className="my-3">
-                    <span className="text-uppercase fw-bold">
-                      {numeral(food?.price).format('0,0 ')} vnđ
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
+
+                  <div className="d-flex justify-content-between align-items-center mt-3">
                     <div className="d-flex">
-                      <span className="fw-bold">Điểm đánh giá:</span>
-                      <div className="ms-3"/>
                       {!averageRating && (
-                        <span className="text-capitalize">chưa có đánh giá  ⭐ ({totalRatings})</span>
+                        <span className="text-capitalize fw-bold" style={{fontSize: 16}}>chưa có đánh giá  ⭐ ({totalRatings})</span>
                       )}
                       {averageRating && (
                         <span className="text-capitalize">{averageRating} ⭐ ({totalRatings})</span>
@@ -241,37 +250,57 @@ function Food() {
 
 
                     <div className="cart_item_quantity d-flex justify-content-center align-items-center">
-                      <div className="style_icon_add" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'de')}>
+                      <div className="style_icon_add" style={{width: 20, height: 20, borderRadius: "8px"}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'de')}>
                         <Icon name="iconMinus" size="10" color="white"/>
                       </div>
-                      <span className="cart_item_text text-primary fw-bold mx-2 fs-5">
+                      <span className="cart_item_text text-primary fw-bold mx-3 fs-5">
                         {orderSelector.item.quantity || 0}
                       </span> 
-                      <div className="style_icon_add" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'in')}>
+                      <div className="style_icon_add" style={{width: 20, height: 20, borderRadius: "8px"}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'in')}>
                         <Icon name="iconPlus" size="10" color="white"/>
                       </div>
                     </div>
                   </div>
 
                   <div className="mt-3">
-                    <span className="fw-bold">Mô tả món ăn:</span> <br/>
+                    <span className="text-label">Mô tả món ăn:</span> <br/>
                     <div className="mt-2"/>
                     <span>{food?.detail}</span>
                   </div>
-                  <div className="mt-3">
-                    <span className="fw-bold">Chú thích:</span>
-                    <ul>
-                      {typeFood?.map((data, id) => (
-                        <li key={id}>{data}</li>
-                      ))}
-                    </ul>
-
+                  <div className="my-3 d-flex align-items-center">
+                    <span className="text-label">thời gian: </span>
+                    <div className="me-3"/>
+                    <div className="d-flex">
+                        <Icon name="iconClock" />
+                      <div className="me-3"/>
+                      <span className="text-uppercase fw-bold">
+                        {food?.time} phút
+                      </span>
+                    </div>
+                  </div>
+                  <div className="my-3 d-flex flex-column">
+                    <span className="text-label">Tổng tiền: </span>
+                    <div className="mt-3"/>
+                    <span className="text-label fw-bold fs-4">
+                      ${numeral(food?.price).format('0,0 ')}
+                    </span>
                   </div>
                 </div>
-                <div className="style_rotate_icon_add mx-2 btnFood" onClick={() => handleBuy(food)}>
-                  <Icon name="iconPlus" color="white" size="16"/>
-                </div>
+                {/* {width > 634 && (
+                  <div className="style_rotate_icon_add mx-2 btnFood" onClick={() => handleBuy(food)}>
+                    <Icon name="iconPlus" color="white" size="16"/>
+                  </div>
+                )} */}
+                {/* {width <= 634 && ( */}
+                  <div className="style_rotate_icon_add mx-2 btnFood" onClick={() => navigate(`${Links['orders']}`)}>
+                    <Icon name="iconCart" color="white" size="19"/>
+                    <div className="totalOrder">
+                      <span>{totalOrder}</span>
+                    </div>
+                  </div>
+                {/* )} */}
               </div>
+              <div style={{marginBottom: "70px"}}/>
             </div>
 
             {/* <div className="restaurant row">

@@ -29,8 +29,10 @@ const OrderSlice = createSlice({
 
         updateItemQuantity: (state, action) => {
           const { id, quantity } = action.payload;
-
+          
           if(quantity === 0){
+            console.log("quantiy", quantity, id);
+
             state.data = state.data.filter(item => item.id !== id)
             state.note = state.note.filter(note => note.id !== id);
       
@@ -38,11 +40,14 @@ const OrderSlice = createSlice({
               state.item = {};
             }
 
+            return;
           }
           const itemToUpdateInData = state.data.find(item => item.id === id);
           if (itemToUpdateInData) {
             itemToUpdateInData.quantity = Math.max(1, quantity);
           }
+
+
         },
 
         getOrder: (state, action) => {

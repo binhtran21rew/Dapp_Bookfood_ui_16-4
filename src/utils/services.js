@@ -2,7 +2,7 @@ import Web3 from "web3";
 import contractData from "../constract/Bookfood.json";
 
 const abi = contractData.abi;
-const contractAddress = "0xcB2577Fb51c3E0ff177D46925E32AC2F5df51274";
+const contractAddress = "0x48C1ce7c635AC3e8169B06eBbD6Afd03D067886e";
 const rpcURL = "http://127.0.0.1:8545"; // Ganache RPC
 const wsURL = "ws://127.0.0.1:8545"
 let web3Instance;

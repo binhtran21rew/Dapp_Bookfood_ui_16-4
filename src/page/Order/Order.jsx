@@ -107,7 +107,7 @@ function Orders() {
       const ref = foodRefs.current[id];
 
       gsap.fromTo(ref, {
-        scale: 0.8,
+        scale: 0.9,
         opacity: 0.8,
         ease: "power3.in"
       }, {
@@ -199,79 +199,78 @@ function Orders() {
         <div className="Order">
           {popup && (
             <>
-              <div ref={optionFoodRef} className="Order_container popup_order stylePopup-full" >
-                <div className="d-flex justify-content-center">
+              <div ref={optionFoodRef} className="Order_container popup_order" >
+                {/* <div className="popup_order_image d-flex justify-content-center">
                   <img src={orderSelector.item.img} alt={orderSelector.item.name} />
-                </div>
-                <div className="stylePopup-full px-5" style={{backgroundColor: 'rgb(242, 242, 242)'}}>
-                  <div className="d-flex justify-content-between text-capitalize fw-bold">
-                    <span className="fs-4">{orderSelector.item.name}</span>
-                    <span>{numeral(orderSelector.item.price).format("0,0")} vnd</span>
-                  </div>
-                  <div className="my-3 d-flex justify-content-between align-items-center">
-                    <span className="text-capitalize fw-bold">bỏ chọn món ăn:</span>
-                    <div className="mb-3"/>
-                    <div className="style_cart_quantity" style={{border: "1px solid red", boxShadow: "0 0 4px red"}} onClick={() => handleRemoveItem(orderSelector.item.id)}>
-                      <Icon name="iconTimes"/>
+                </div> */}
+                <div className="popup_order_option px-5">
+                    <div className="d-flex justify-content-between text-capitalize fw-bold">
+                      <span className="fs-3">{orderSelector.item.name}</span>
+                      <span className="fs-4">{numeral(orderSelector.item.price).format("0,0")} vnd</span>
                     </div>
-                  </div>
+                    <div className="my-3 d-flex justify-content-between align-items-center">
+                      <span className="text-label">bỏ chọn món ăn:</span>
+                      <div className="mb-3"/>
+                      <div className="style_cart_quantity" style={{border: "1px solid red", boxShadow: "0 0 4px red"}} onClick={() => handleRemoveItem(orderSelector.item.id)}>
+                        <Icon name="iconTimes"/>
+                      </div>
+                    </div>
 
-                  <div className="my-4 d-flex justify-content-between">
-                    <span className="fw-bold">Cập nhật số lượng:</span>
-                    <div className="cart_item_quantity d-flex justify-content-center align-items-center">
-                      <div className="style_icon_add me-3" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'de')}>
-                        <Icon name="iconMinus" size="10" color="white"/>
-                      </div>
-                      <span className="cart_item_text text-primary fw-bold mx-2 fs-5">
-                        {orderSelector.item.quantity}
-                      </span> 
-                      <div className="style_icon_add ms-3" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'in')}>
-                        <Icon name="iconPlus" size="10" color="white"/>
+                    <div className="my-4 d-flex justify-content-between">
+                      <span className="text-label">Cập nhật số lượng:</span>
+                      <div className="cart_item_quantity d-flex justify-content-center align-items-center">
+                        <div className="style_icon_add me-3" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'de')}>
+                          <Icon name="iconMinus" size="10" color="white"/>
+                        </div>
+                        <span className="cart_item_text text-primary fw-bold mx-2 fs-5">
+                          {orderSelector.item.quantity}
+                        </span> 
+                        <div className="style_icon_add ms-3" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'in')}>
+                          <Icon name="iconPlus" size="10" color="white"/>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="my-3">
-                    <span className="text-capitalize fw-bold">chọn kích cỡ món ăn:</span>
-                    <div className="mb-3"/>
-                    {optionSize.map((data,id) => {
-                      
-                        const currentNote = orderSelector.note.find(note => note.id === orderSelector.item.id);
-                        const isChecked = currentNote ? currentNote.size === data.label : false; // Hoặc so sánh với sizeOptions[data.value]
+                    <div className="my-3">
+                      <span className="text-label">chọn kích cỡ món ăn:</span>
+                      <div className="mb-3"/>
+                      {optionSize.map((data,id) => {
                         
-                        return(
-                          <div className="p-2" onClick={() => handleChangeNote(data.value, "size", orderSelector.item?.id)} key={id}>
-                            <span className="text-capitalize">{data.label}</span>
-                            <input 
-                              type="radio"
-                              name="size"
-                              value={data.value}
-                              checked={isChecked}
-                              onChange={(e) => handleChangeNote(e.target.value, "size", orderSelector.item?.id)}
-                              className="mx-3"
-                            />
-                          </div>
-                        )
-                    })}
-                  </div>
+                          const currentNote = orderSelector.note.find(note => note.id === orderSelector.item.id);
+                          const isChecked = currentNote ? currentNote.size === data.label : false; // Hoặc so sánh với sizeOptions[data.value]
+                          
+                          return(
+                            <div className="p-2" onClick={() => handleChangeNote(data.value, "size", orderSelector.item?.id)} key={id}>
+                              <span className="text-capitalize">{data.label}</span>
+                              <input 
+                                type="radio"
+                                name="size"
+                                value={data.value}
+                                checked={isChecked}
+                                onChange={(e) => handleChangeNote(e.target.value, "size", orderSelector.item?.id)}
+                                className="mx-3"
+                              />
+                            </div>
+                          )
+                      })}
+                    </div>
 
-                  <div className="my-5">
-                    <span className="fw-bold">Thêm ghi chú món ăn</span>
-                    <div className="mb-3"/>
+                    <div className="my-5">
+                      <span className="text-label">Thêm ghi chú món ăn</span>
+                      <div className="mb-3"/>
 
-                    <input 
-                      placeholder="nhập ghi chú..."
-                      className="my-3 p-3"
-                      value={orderSelector.note.find(note => note.id === orderSelector.item.id)?.note || ""}
-                      style={{width: "99%", height: "70px", borderRadius: "10px", border: '1px solid black'}}
-                      onChange={(e) => handleChangeNote(e.target.value, "note", orderSelector.item.id)}
-                    />
-                  </div>
-
-
+                      <input 
+                        placeholder="nhập ghi chú..."
+                        className="my-3 p-3"
+                        value={orderSelector.note.find(note => note.id === orderSelector.item.id)?.note || ""}
+                        style={{width: "99%", height: "70px", borderRadius: "10px", border: '1px solid black'}}
+                        onChange={(e) => handleChangeNote(e.target.value, "note", orderSelector.item.id)}
+                      />
+                    </div>
+                    
                 </div>
-
+                
               </div>
-              <div ref={optionFoodBtnRef} className="stylePopup-bottom" style={{zIndex: 99999}}>
+              <div ref={optionFoodBtnRef} className="stylePopup-bottom" style={{zIndex: 9999}}>
                 <BtnConfirm radius={8} onClick={() => setPopup(false)}> 
                   <span className="text-white fw-bold ms-3 fs-5">Cập nhật giỏ hàng</span>
                 </BtnConfirm>
@@ -315,7 +314,7 @@ function Orders() {
                 </div>
                 <div className="my-4 d-flex justify-content-between align-items-center">
                     <span className="fw-bold fs-5">Tóm tắt đơn hàng</span>
-                    <span className="text-primary fw-bold" onClick={() => navigate(-1)}>Thêm món</span>
+                    <span className="text-primary fw-bold" style={{cursor: "pointer"}} onClick={() => navigate(Links['home'])}>Thêm món</span>
                 </div>
                 <div className="Order_cart">
                     {orderSelector.data.map((data, id) => (
@@ -324,6 +323,7 @@ function Orders() {
                           key={id}
                           className="d-flex cart_wrapper_item justify-content-between"
                           onClick={() => handleUpdateFood(data.id)}
+                          style={{cursor: "pointer"}}
                         >
                             <div className="col-10 d-flex">
                                 <div className="cart_item_img">
@@ -347,7 +347,7 @@ function Orders() {
                             </div>
 
                             <div className="col-2 d-flex flex-column justify-content-around align-items-end">
-                                <span className="cart_item_text">
+                                <span className="cart_item_text fw-bold">
                                     {numeral(data.price).format("0,0")}
                                 </span>
                                 <span className="style_cart_quantity">
@@ -359,7 +359,7 @@ function Orders() {
                 </div>
                 <div className="d-flex justify-content-between pb-4">
                     <span className="cart_item_text fw-bold fs-5">Tổng tạm tính</span>
-                    <span className="cart_item_text fs-5">{numeral(total).format("0,0")} vnd</span>
+                    <span className="cart_item_text fs-5 fw-bold">${numeral(total).format("0,0")}</span>
                 </div>
               </div>
               <div className="Order_container">
@@ -409,8 +409,8 @@ function Orders() {
               <div className="blank"/>
               <div className="stylePopup-bottom">
                 <div className="d-flex justify-content-between" style={{padding: "20px 20px 0 20px ",}}>
-                  <span>Tổng cộng</span>
-                  <span className="fw-bold">{numeral(total).format("0,0")} vnd</span>
+                  <span className="fs-5 fw-bold">Tổng cộng</span>
+                  <span className="fw-bold">${numeral(total).format("0,0")}</span>
                 </div>
 
                 <BtnConfirm radius={8} onClick={() => handlePayment()}> 

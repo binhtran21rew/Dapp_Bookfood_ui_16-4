@@ -68,6 +68,7 @@ code {
   @include screen_tablet(){
     margin: 0 15px;
   }
+   
 }
 
 .style_rotate_icon_add{
@@ -76,13 +77,21 @@ code {
   justify-content: center;
   align-items: center;
   padding: 12px;
-  border-radius: 8px;
   max-width: 38px;
   z-index: 1;
   svg{
     position: relative;
     z-index: 2;
   }
+  max-width: $width_cart;
+  width: $width_cart;
+  height: $width_cart;
+
+  // @include screen_mobile(){
+  //   max-width: 56px;
+  //   width: 56px;
+  //   height: 56px;
+  // }
 
   &::before{
     content: "";
@@ -90,9 +99,16 @@ code {
     position: absolute;
     inset: 0;
     background-color: $color-black;
-    border-radius: 12px;
+    border-radius: 23px;
     rotate: 45deg;
     z-index: 1;
+    width: $width_cart;
+    height: $width_cart;
+    // @include screen_mobile(){
+    //   width: 56px;
+    //   height: 56px;
+
+    // }
   }
 }
 
@@ -141,7 +157,7 @@ code {
   left: 0;
   width: 100%;
   height: $height_popup;
-  
+  box-shadow: 0 0 5px $color-white-blur;
   background-color: $color-white;
   z-index: 999;
 
@@ -164,8 +180,8 @@ code {
     position: fixed;
     right: 10%;
     top: 5%;
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     background-color: $color-white;
     border-radius: 50%;
   }
@@ -197,8 +213,8 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   background-color: $color-white;
   border-radius: 50%;
   cursor: pointer;
@@ -220,6 +236,26 @@ code {
 
 .blank{
   height: calc($height_popup - 10px);
+}
+
+.totalOrder{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 18%;
+  right: 18%;
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  border-radius: 50%;
+  z-index: 2;
+
+  span{
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+  }
 }
 
 

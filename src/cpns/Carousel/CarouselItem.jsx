@@ -75,16 +75,16 @@ function CarouselItem({...props}) {
         <div className='d-flex flex-row'>
             <div className="Food_content_item ">
                 <Swiper 
-                    slidesPerView={width <= 634 ? 3 : 2} 
-
+                    slidesPerView={width <= 634 && 2 || width >= 1050 && 3 || 2} 
                     slidesPerGroup={1}
                     loop={true}
                     modules={[Pagination]}
                     pagination={true}
+                    className='swiper_wrapper'
                 >
                     {listFood.map((item, id) => (
-                        <Fragment key={id}>
-                            <SwiperSlide style={{display: 'flex', justifyContent: "center", alignItems:"center"}}>
+                        <Fragment >
+                            <SwiperSlide className='swiper-slide-custom' style={{display: 'flex', justifyContent: "center", alignItems:"center"}} key={item.id}>
                             <div ref={(e) => foodRefs.current[item.id] = e}  className="food_style_wrapper" onClick={() => handleClick(item)}>
                                 <div className="item-wrapper">
                                     <div className="food_image">
@@ -102,9 +102,9 @@ function CarouselItem({...props}) {
                                         <span className="food_detail text-truncate-2lines">{item.detail}</span>
                                         <span className="food_price text-truncate-2lines fw-bold mt-2">${numeral(item.price).format("0,0")}</span>
                                         <div className='mt-5'/>
-                                        <div className="d-flex justify-content-center" style={{position: "absolute", bottom: "-5%", left: width <= 634 ? "36%" : "38%", zIndex: 3}}>
+                                        <div className="d-flex justify-content-center" style={{position: "absolute", bottom: "-5%", left: width <= 634 ? "36%" : "38%", zIndex: 3}} onClick={(e) => handleBuy(e, item)}>
                                             <div className="item-button">
-                                                <div className="icon" onClick={(e) => handleBuy(e, item)}>
+                                                <div className="icon" >
                                                     <Icon name="iconPlus" color="white" size="12"/>
                                                 </div>
                                             </div>
@@ -118,7 +118,7 @@ function CarouselItem({...props}) {
 
                 </Swiper>
             </div>
-            <div className="Food_content col-4 d-flex flex-column justify-content-center px-3">
+            <div className="Food_content col-4 d-flex flex-column justify-content-center align-items-center px-3">
                 <span className='Food_content_title ' style={{fontSize: "24px"}}>{text}</span>
                 <span className='Food_content_detail d-flex flex-grow mt-3' style={{fontSize: "12px"}}>{detail}</span>
 

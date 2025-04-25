@@ -6,7 +6,7 @@ import gsap from "gsap";
 import "./fooditem.scss";
 
 import { foodContent, Links } from "../../utils/constant";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Icon from "../../utils/Icon";
 import { addOrderData } from "../../context/slice/orderSlice";
 import BtnConfirm from "../BtnConfirm/BtnConfirm";
@@ -26,12 +26,13 @@ function FoodItem({ ...props }) {
     const foodRefs = useRef([]);
     const btnRef = useRef(null);
     const positionRef = useRef(null);
+    const { width } = useOutletContext();
 
     const [blockFood, setBlockFood] = useState([]);
     const [blockFoodName, setBlockFoodName] = useState([]);
     const [foodsRating, setFoodsRating] = useState([]);
     const [popup, setPopup] = useState(false);
-    const [width, setWidth] = useState(window.innerWidth);
+
     const [totalOrder, setTotalOrder] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
 
@@ -69,18 +70,12 @@ function FoodItem({ ...props }) {
     }, [popup]);
 
     
-
-
-    
-
-
-    
     
     return (  
         <div className="FoodItem"> 
-            {popup && orderSelector.data.length !== 0 && (
-              <div ref={btnRef} className="stylePopup-bottom" style={{padding: "10px 0"}}>
-                <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
+            {popup &&  orderSelector.data.length !== 0 && (
+              <div ref={btnRef} className="FoodItem_mobile stylePopup-bottom" style={{padding: "10px 0"}}>
+                <BtnConfirm  radius={28} className="d-flex justify-content-around  align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
                   <div className="d-flex align-items-center" >
                     <span className="text-white fw-bold fs-5">Giỏ hàng</span>
                     <li className="text-white ms-3">{totalOrder} món</li>
@@ -88,6 +83,17 @@ function FoodItem({ ...props }) {
                   <div className="text-white">{numeral(totalPrice).format('0,0 ')} vnd</div>
                 </BtnConfirm>
               </div>
+            )}
+
+            {popup && orderSelector.data.length !== 0 && (
+                <div className="FoodItem_cart styleSticky_topRight" style={{backgroundColor: "black", zIndex: 9999, borderRadius: "14px 8px 35px 12px"}} onClick={() => navigate(`${Links['orders']}`)}>
+                    <div className="btnFood d-flex justify-content-center align-items-center w-100 h-100 pe-2">
+                        <Icon name="iconCart" color="white"/>
+                        <div className="totalOrder">
+                            <span>{totalOrder}</span>
+                        </div>
+                    </div>
+                </div>
             )}
 
             <div className="block_food_style">
@@ -129,8 +135,9 @@ function FoodItem({ ...props }) {
                         detail: "Fresh and healthy salad made with our own Chef Recipe. Special healthy and-fat free dish for those who want to lose weight."
                     }}
                     setPopup={setPopup}
-                    heightImage={340}
-                    widthImage={340}
+                    heightImage={"90%"}
+                    widthImage={"90%"}
+                    hightLight={false}
                 />
                 {/* {listFood.map((item, id) => (
                     <div key={id} className="food_style_wrapper">

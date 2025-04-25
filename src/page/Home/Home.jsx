@@ -1,22 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Icon from '../../utils/Icon'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useOutletContext } from 'react-router-dom';
+import { Button, Form, FormControl } from 'react-bootstrap';
+import gsap from 'gsap';
 
 
 import './home.scss';
 
-import capitalizeWords from '../../utils/functionUtils';
+import {groupByCategory} from '../../utils/functionUtils';
 import FoodItem from '../../cpns/FoodItem/FoodItem';
 import services from '../../utils/services';
-import { Button, Form, FormControl } from 'react-bootstrap';
 import BtnConfirm from '../../cpns/BtnConfirm/BtnConfirm';
-import gsap from 'gsap';
+import Icon from '../../utils/Icon'
 import BlockFood from '../../cpns/BlockFood/BlockFood';
+
 
 function Home() {
 
   const [listFood, setListFood] = useState([]);
 
   const filterRef = useRef(null);
+  const searchRef = useRef(null);
+  const navCateRef = useRef([]);
+  const { width } = useOutletContext();
 
   const [temp, setTemp] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,6 +34,10 @@ function Home() {
   const [minRating, setMinRating] = useState(0);
   const [filterVegan, setFilterVegan] = useState(false);
   const [filterGlutenFree, setFilterGlutenFree] = useState(false);
+  const [foodCategories, setFoodCategories] = useState([]);
+  const [nameCate, setNameCate] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
+
 
   useEffect(() => {
     const getData = async () =>{ 
@@ -50,16 +60,15 @@ function Home() {
             isGlutenFree: food.isGlutenFree,
             totalRatings: food.totalRatings.toString(),
             totalStars: food.totalStars.toString(),
-            img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+            img: `https://gateway.pinata.cloud/ipfs/${food.img}`,
+            time: food.time
           })
         });
 
-        
-
-        
-  
         setListFood(formatDataFood);
         setTemp(formatDataFood);
+        setFoodCategories(groupByCategory(formatDataFood));
+        
       }catch(err){
         console.log("Lỗi khi lấy danh sách món ăn:", err);
       }
@@ -82,8 +91,10 @@ function Home() {
                 totalRatings: food.totalRatings.toString(),
                 totalStars: food.totalStars.toString(),
                 categoryId: food.categoryId.toString(),
-                img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+                img: `https://gateway.pinata.cloud/ipfs/${food.img}`,
+                time: food.time
             };
+            
             setListFood((prev) => {
                 if (!prev.find(item => item.id === formatDataFood.id)) {
                     return [...prev, formatDataFood];
@@ -119,6 +130,42 @@ function Home() {
 
   }, [showFilterModal]);
 
+  const handleToogleSearch = () =>{
+    const ref = searchRef.current;
+    
+
+    if(!isSearch){
+      setIsSearch(true);
+  
+        gsap.fromTo(ref, {
+          display: "flex",
+          y: "-100%",
+          opacity: .8
+        }, {
+          duration: .3,
+          y: 0,
+          opacity: 1,
+          ease: "power3.in"
+        })
+        
+    }else{
+      setIsSearch(false);
+      gsap.fromTo(ref, {
+        y: 0,
+        opacity: 1
+      }, {
+        duration: .3,
+        display: "none",
+        y: "-100%",
+        opacity: .8,
+        ease: "power3.in"
+      })
+    }
+  }
+
+
+  
+
   const handleSearch = async () => {
 
     const idRes = new Set();
@@ -139,27 +186,30 @@ function Home() {
           totalStars: food.totalStars.toString(),
           // restaurantId: food.restaurantId.toString(),
           categoryId: food.categoryId.toString(),
-          img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+          img: `https://gateway.pinata.cloud/ipfs/${food.img}`,
+          time: food.time,
+          detail: food.detail
         }));
   
         setListFood(formatDataFood);
-      }else{
-        const res = await services.getAllFoods();
-        const formatDataFood = res.map((food) => ({
-          id: food.id.toString(),
-          name: food.name,
-          price: parseInt(food.price),
-          isVegan: food.isVegan,
-          isGlutenFree: food.isGlutenFree,
-          totalRatings: food.totalRatings.toString(),
-          totalStars: food.totalStars.toString(),
-          // restaurantId: food.restaurantId.toString(),
-          categoryId: food.categoryId.toString(),
-          img: `https://gateway.pinata.cloud/ipfs/${food.img}`
-        }));
-        setListFood(formatDataFood);
-
       }
+      // }else{
+      //   const res = await services.getAllFoods();
+      //   const formatDataFood = res.map((food) => ({
+      //     id: food.id.toString(),
+      //     name: food.name,
+      //     price: parseInt(food.price),
+      //     isVegan: food.isVegan,
+      //     isGlutenFree: food.isGlutenFree,
+      //     totalRatings: food.totalRatings.toString(),
+      //     totalStars: food.totalStars.toString(),
+      //     // restaurantId: food.restaurantId.toString(),
+      //     categoryId: food.categoryId.toString(),
+      //     img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+      //   }));
+      //   setListFood(formatDataFood);
+
+      // }
       
     } catch (error) {
       console.error("Lỗi khi lấy danh sách món ăn:", error);
@@ -194,11 +244,51 @@ function Home() {
       }
     })
   }
-  
 
+  const handleFood = (name, id) => {
+    if(name === nameCate){
+      navCateRef.current.forEach((el) => {
+        gsap.to(el, { backgroundColor: "transparent" });
+  
+        const text = el.querySelector(".cate_text");
+        if (text) {
+          gsap.to(text, { color: "black" });
+        }
+      });
+
+      setListFood(temp);
+      setNameCate(null)
+      return;
+    }
+    navCateRef.current.forEach((el) => {
+      gsap.to(el, { backgroundColor: "rgba(236, 235, 235, 0.5)", duration: 0.3 });
+  
+      const text = el.querySelector(".cate_text");
+      if (text) {
+        gsap.to(text, { color: "black", duration: 0.3 });
+      }
+    });
+
+    const ref = navCateRef.current[id];
+    const textRef = ref.querySelector(".cate_text");
+  
+    gsap.to(ref, {
+      backgroundColor: "black",
+      duration: 0.3,
+    });
+  
+    gsap.to(textRef, {
+      color: "white",
+      duration: 0.3,
+    });
+    
+    setListFood(foodCategories[name]);
+    setNameCate(name)
+  }
+  
   return (
     <div className='Home'>
-      {/* {showFilterModal && (
+      {showFilterModal && (
         <div ref={filterRef} className='stylePopup-bottom p-4' style={{height: 500}}>
           <div className="" style={{
             position: "absolute",
@@ -267,7 +357,7 @@ function Home() {
               <span className='text-white fs-5 text-capitalize'>lọc</span>
           </BtnConfirm>
         </div>
-      )} */}
+      )}
       {/* <div className="py-3">
         <div className="search">
           <input
@@ -290,6 +380,61 @@ function Home() {
           </span>
         </div>
       </div> */}
+      {width <= 634  && (
+        <div ref={searchRef} className="search">
+          <div className="search_wrapper">
+            <input
+              type="search"
+              placeholder={`Tìm kiếm...`}
+              className="me-2 w-100" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {!searchQuery && (
+              <div className="search_icon"  onClick={() => handleToogleSearch()}>
+                <Icon name="iconTimes"/>
+              </div>
+            )}
+            {searchQuery && (
+              <div className="search_icon"  onClick={() => handleSearch()}>
+                <Icon name="iconSearch"/>
+              </div>
+            )}
+          </div>
+        </div>
+      
+      )}
+
+      <div className="mobile_view">
+        <div className='d-flex row mb-3'>
+          <div className='col-10 d-flex flex-column'>
+            <span className='cate_title'>delicious {nameCate ? nameCate : "food"}</span>
+            <span className='cate_detail'>We made fresh and Healthy food</span>
+          </div>
+          <div className='col-2 text-center align-content-center' onClick={() => handleToogleSearch(true)}>
+            <Icon name={"iconSearch"}/>
+          </div>
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Swiper 
+            slidesPerView={3} 
+            loop={true}
+          >
+            {Object.keys(foodCategories).map((data, id) => (
+              <SwiperSlide key={id} className='catelories_wrapper'>
+                <div ref={(e) => navCateRef.current[id] = e} className="catelories_item" onClick={() => handleFood(data, id)}>
+                  <span className='cate_text'>{data}</span>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <div className="col-2 mt-3 text-center" onClick={() => setShowFilterModal(true)}>
+            <Icon name="iconFilter"/>
+          </div>
+
+        </div>
+      </div>
 
       <div className="">
         <FoodItem listFood={listFood}/>

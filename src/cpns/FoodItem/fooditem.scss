@@ -1,10 +1,11 @@
 @use "../../scss/" as *;
 
 .FoodItem {
-
+  height: 100%;
   .block_food_style{
     background-color: $bg-color-item;
     border-radius: 42px;
+    margin-bottom: $height_popup;
     @include screen_laptop(){
       .BlockFood:first-child{
         display: none;
@@ -16,13 +17,25 @@
       }
     }
     @include screen_mobile(){
-      height: 100vh;
       .BlockFood:not(:first-child){
         display: none;
       }
       .CarouselItem{
         padding-top: 20%;
       }
+    }
+  }
+  .FoodItem_cart{
+    @include screen_mobile(){
+      display: none;
+    }
+  }
+  .FoodItem_mobile{
+    @include screen_laptop(){
+      display: none;
+    }
+    @include screen_tablet(){
+      display: none;
     }
   }
   // .block_food{

@@ -1,12 +1,9 @@
 @use "../../scss/" as *;
 
 .CarouselItem {
-  .swiper-slide{
-    @include screen_tablet(){
-      // margin: 0 50px 0 0;
-    }
-    @include screen_mobile(){
-      width: 40% !important;
+  @include screen_tablet(){
+    div{
+      justify-content: space-between; 
     }
   }
 
@@ -17,6 +14,16 @@
     @include screen_mobile(){
       width: 100%;
     }
+    .swiper_wrapper{
+      .swiper-slide-custom{
+        @include screen_tablet(){
+          min-width: 200px;
+        }
+
+      }
+
+    }
+
 
     .food_style_wrapper{
 
@@ -25,7 +32,7 @@
           display: flex;
           position: relative;
           justify-content: center;
-          top: -10px;
+          top: 0;
           z-index: 2;
           // border: 1px solid red;
           .food_image{
@@ -43,10 +50,10 @@
           display: flex;
           position: relative;
           justify-content: center;
-          bottom: 100px;
-          left: 20px;
+          bottom: 90px;
+          left: 8px;
           z-index: 1;
-          width: 140px;
+          width: 155px;
           height: 250px;
           background-color: rgb(255, 255, 255);
           margin: 0 10px;
@@ -57,6 +64,7 @@
 
           @include screen_mobile(){
             bottom: 50px;
+            bottom: 70px;
             left: 2px;
             width: 120px;
             height: 220px;
@@ -66,9 +74,9 @@
             text-align: center;
             align-content: flex-end;
               .food_name {
-                font-size: 16px;
+                font-size: 18px;
                 text-transform: capitalize;
-                font-weight: bold;
+                font-weight: 800;
 
                 @include screen_mobile(){
                   padding: 0 5px;
