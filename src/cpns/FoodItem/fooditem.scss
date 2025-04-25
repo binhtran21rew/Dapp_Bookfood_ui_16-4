@@ -1,100 +1,142 @@
 @use "../../scss/" as *;
 
 .FoodItem {
-  .Food_title{
+
+  .block_food_style{
+    background-color: $bg-color-item;
+    border-radius: 42px;
+    @include screen_laptop(){
+      .BlockFood:first-child{
+        display: none;
+      }
+    }
+    @include screen_tablet(){
+      .BlockFood:first-child{
+        display: none;
+      }
+    }
     @include screen_mobile(){
-      font-size: 18px;
-      font-weight: bold;
-      margin: 10px;
+      height: 100vh;
+      .BlockFood:not(:first-child){
+        display: none;
+      }
+      .CarouselItem{
+        padding-top: 20%;
+      }
     }
   }
-  .FoodItem_block {
-    @include screen_mobile() {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-    }
+  // .block_food{
+  //   display: none;
+  //   @include screen_mobile(){
+  //     display: block;
+  //   }
+  // }
+  // .Food_title{
+  //   @include screen_mobile(){
+  //     font-size: 18px;
+  //     font-weight: bold;
+  //     margin: 10px;
+  //   }
+  // }
+  // .FoodItem_block {
+  //   @include screen_laptop(){
+  //     margin: 20px 0;
+  //   }
+  //   @include screen_mobile() {
+  //     display: flex;
+  //     flex-wrap: wrap;
+  //     justify-content: space-evenly;
+  //     margin: 20px 0;
+  //   }
 
-    .FoodItem_wrapper {
-      position: relative;
-      @include screen_laptop(){
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: start;
-      }
-      @include screen_mobile() {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        background-color: $bg-color-item;
-        margin: 10px 0;
-        padding: 10px;
-        width: calc(50% - 10px); /* Chia đôi trên mobile (trừ margin) */
-        border-radius: 18px;
-        &:nth-child(odd) {
-          margin-right: 10px;
-        }
-      }
+  //   .FoodItem_wrapper {
+  //     position: relative;
+  //     @include screen_laptop(){
+  //       display: flex;
+  //       flex-direction: row-reverse;
+  //       justify-content: start;
+  //       margin-top: 25px;
+  //       padding: 10px;
+  //       background-color: $bg-color-item;
+  //       border-radius: 18px;
+  //     }
+  //     @include screen_mobile() {
+  //       display: flex;
+  //       flex-direction: column;
+  //       justify-content: space-around;
+  //       background-color: $bg-color-item;
+  //       margin: 10px 0;
+  //       padding: 10px;
+  //       width: calc(50% - 10px); /* Chia đôi trên mobile (trừ margin) */
+  //       border-radius: 18px;
+  //       &:nth-child(odd) {
+  //         margin-right: 10px;
+  //       }
+  //     }
 
-      .FoodItem_content{
-        display: flex;
-        flex-direction: column;
+  //     .FoodItem_content{
+  //       display: flex;
+  //       flex-direction: column;
 
-        @include screen_laptop(){
-          margin-left: 20px;
-          justify-content: space-around;
-        }
-        .foodItem_name {
-        }
+  //       @include screen_laptop(){
+  //         margin-left: 20px;
+  //         justify-content: space-around;
+  //       }
+  //       .foodItem_name {
+  //       }
   
-        .foodItem_price {
-          @include screen_mobile() {
-            font-size: 12px;
-          }
-          font-size: 14px;
-        }
+  //       .foodItem_price {
+  //         @include screen_mobile() {
+  //           font-size: 12px;
+  //         }
+  //         font-size: 14px;
+  //       }
 
-      }
+  //     }
 
-      .foodItem_img {
-        text-align: end;
-        border-radius: 12px;
-        @include screen_mobile() {
-          img {
-            width: 150px;
-          }
-        }
-      }
-      .FoodItem_add{
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        top: -6px;
-        right: -6px;
-        z-index: 10;
-        div{
-          width: 26px;
-          height: 26px;
-        }
-      }
-    }
+  //     .foodItem_img {
+  //       text-align: end;
+  //       border-radius: 12px;
+  //       img{
+  //           width: 100px;
+  //           height: 100px;
+  //       }
+  //       @include screen_mobile() {
+  //         img {
+  //           width: 150px;
+  //         }
+  //       }
+  //     }
+  //     .FoodItem_add{
+  //       position: absolute;
+  //       display: flex;
+  //       justify-content: center;
+  //       align-items: center;
+  //       top: -6px;
+  //       right: -6px;
+  //       z-index: 10;
+  //       div{
+  //         width: 26px;
+  //         height: 26px;
+  //       }
+  //     }
+  //   }
 
-    @include screen_mobile() {
-      & > .FoodItem_wrapper:last-child:nth-child(odd) {
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-around;
-        padding: 20px 10px;
-        .FoodItem_content{
-          width: 80%;
-        }
-        .foodItem_img{
-          text-align: center;
-          align-content: center;
-        }
+  //   @include screen_mobile() {
+  //     & > .FoodItem_wrapper:last-child:nth-child(odd) {
+  //       flex-direction: row;
+  //       width: 100%;
+  //       justify-content: space-around;
+  //       padding: 20px 10px;
+  //       .FoodItem_content{
+  //         width: 80%;
+  //       }
+  //       .foodItem_img{
+  //         text-align: center;
+  //         align-content: center;
+  //       }
 
-      } 
-    }
-  }
+  //     } 
+  //   }
+  // }
 }

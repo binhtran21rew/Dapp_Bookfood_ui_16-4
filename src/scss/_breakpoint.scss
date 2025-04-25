@@ -2,12 +2,12 @@
 
 
 @mixin screen_laptop{
-    @media only screen and (min-width: $width-medium) {
+    @media only screen and (min-width: $width-large){
         @content;
     }
 }
-@mixin screen_table {
-    @media only screen and (min-width: $width-small) and (max-width: $width-medium) {
+@mixin screen_tablet {
+    @media only screen and (min-width: $width-small) and (max-width: $width-large) {
         @content;
     }
 }

@@ -1,6 +1,9 @@
 @use '../../scss/' as *;
 .Restaurant{
     position: relative;
+    @include screen_tablet(){
+        padding: 50px;
+    }
     @include screen_laptop(){
         padding: 50px;
     }
@@ -8,27 +11,63 @@
         padding: 0 20px;
     }
     .Restaurant_food{
+        @include screen_tablet(){
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: calc($height_popup - 20px);
+        }
         @include screen_laptop(){
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 50px;
+            margin-bottom: calc($height_popup - 20px);
         }
         .food_container{
-            padding: 20px;
+            position: relative;
             background-color: rgba(255, 255, 255, .8);
             border-radius: 18px;
+            @include screen_tablet(){
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 50px;
+
+            }
+            @include screen_laptop(){
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 50px;
+            }
+
+            @include screen_mobile(){
+                padding: 20px 30px;
+
+            }
+
+            .btnFood{
+                position: absolute;
+                bottom: 4%;
+                right: 2%;
+            }
+
         }
         @include screen_mobile(){
             padding: 50px 0;
-
-
-
         }
         .foodItem_img{
+            @include screen_tablet(){
+                display: flex;
+                width: 450px;
+                height: 450px;
+            }
             @include screen_laptop(){
-                width: 250px;
-                height: 250px;
+                display: flex;
+                width: 450px;
+                height: 450px;
             }
             @include screen_mobile(){
                 text-align: right;
@@ -36,6 +75,11 @@
         }
 
         .foodItem_title{
+            @include screen_tablet(){
+                display: flex;
+                justify-content: space-between;
+                font-size: 25px;
+            }
             @include screen_laptop(){
                 display: flex;
                 justify-content: space-between;
@@ -108,7 +152,10 @@
                     align-items: center;
                 }
                 .foodItem_img{
-    
+                    @include screen_tablet(){
+                        width: 250px;
+                        height: 250px;
+                    }
                     @include screen_laptop(){
                         width: 250px;
                         height: 250px;

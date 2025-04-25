@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 
 
-import { Links } from '../utils/constant'
+import { foodVariants, homeVariants, Links } from '../utils/constant'
 
 import MainLayout from '../layouts';
 import Loadpage from '../cpns/Loadpage';
@@ -16,20 +17,40 @@ import OrderDetail from '../page/OrderDetail/OrderDetail';
 
 function AppRouter() {
   const location = useLocation();
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (navigate && navigate.scrollRestoration) {
+  //     navigate.scrollRestoration = 'manual';
+  //   }
 
+  //   return () => {
+  //     if (navigate && navigate.scrollRestoration) {
+  //       navigate.scrollRestoration = 'auto';
+  //     }
+  //   };
+  // }, [navigate]);
 
   return (
-    <Routes location={location} key={location.pathname} >
-        <Route element={<MainLayout />}>
-            <Route  path={Links['home']} element={<Loadpage><Home /></Loadpage>} />
-            <Route  path={Links['categories']} element={<Loadpage><Categories /></Loadpage>} />
-            <Route  path={`${Links['orders']}`} element={<Loadpage><Order /></Loadpage>} />
-            <Route  path={`${Links['food']}`} element={<Loadpage><Food /></Loadpage>} />
-            <Route  path={`${Links['carts']}`} element={<Loadpage><Carts /></Loadpage>} />
-            <Route  path={`${Links['orderDetail']}/:id`} element={<Loadpage><OrderDetail /></Loadpage>} />
+    <AnimatePresence mode="wait"> 
+      <Routes location={location} key={location.pathname} >
+          <Route element={<MainLayout />}>
+              <Route  path={Links['home']} element={
+                <Loadpage 
+                variants={homeVariants}
+              >
+                <Home /></Loadpage>} />
+              <Route  path={Links['categories']} element={<Loadpage ><Categories /></Loadpage>} />
+              <Route  path={`${Links['orders']}`} element={<Loadpage><Order /></Loadpage>} />
+              <Route  path={`${Links['food']}`} element={
+                <Loadpage 
+                  variants={foodVariants}
+                ><Food /></Loadpage>} />
+              <Route  path={`${Links['carts']}`} element={<Loadpage><Carts /></Loadpage>} />
+              <Route  path={`${Links['orderDetail']}/:id`} element={<Loadpage><OrderDetail /></Loadpage>} />
 
-        </Route>
-    </Routes>
+          </Route>
+      </Routes>
+    </AnimatePresence>
   )
 }
 

@@ -7,6 +7,7 @@ import services from '../../utils/services';
 import validJson from '../../utils/validJson';
 import { data, useNavigate } from 'react-router-dom';
 import Icon from '../../utils/Icon';
+import BtnBack from '../../cpns/BtnBack/BtnBack';
 
 function Cart() {
   const navigate = useNavigate();
@@ -49,10 +50,8 @@ function Cart() {
     <Container className="pt-4">
 
     <div className="d-flex justify-content-between">
-    <h2>Danh Sách Đơn Hàng</h2>
-        <div className="col-1" onClick={() => navigate(-1)}>
-        <Icon name="iconArrowLeft" size="14" />
-        </div>
+      <h2>Danh Sách Đơn Hàng</h2>
+      <BtnBack /> 
     </div>
     <Table striped bordered hover size="sm">
       <thead className="text-capitalize">

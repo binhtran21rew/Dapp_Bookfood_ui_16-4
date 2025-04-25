@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Icon from '../../utils/Icon'
 
 
@@ -9,11 +9,14 @@ import FoodItem from '../../cpns/FoodItem/FoodItem';
 import services from '../../utils/services';
 import { Button, Form, FormControl } from 'react-bootstrap';
 import BtnConfirm from '../../cpns/BtnConfirm/BtnConfirm';
+import gsap from 'gsap';
+import BlockFood from '../../cpns/BlockFood/BlockFood';
 
 function Home() {
 
   const [listFood, setListFood] = useState([]);
 
+  const filterRef = useRef(null);
 
   const [temp, setTemp] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,18 +36,27 @@ function Home() {
         
         const res = await services.getAllCategories();
         setCategories(res);
-        const formatDataFood = resFood.map((food) => ({
-          id: food.id.toString(),
-          name: food.name,
-          detail: food.detail,
-          price: parseInt(food.price),
-          isVegan: food.isVegan,
-          isGlutenFree: food.isGlutenFree,
-          totalRatings: food.totalRatings.toString(),
-          totalStars: food.totalStars.toString(),
-          categoryId: food.categoryId.toString(),
-          img: `https://gateway.pinata.cloud/ipfs/${food.img}`
-        }));
+        const formatDataFood = resFood.map((food) => {
+          const category = res.find(cat => String(cat.id) === String(food.categoryId));
+          
+          return ({
+            id: food.id.toString(),
+            categoryId: food.categoryId.toString(),
+            categoryName: category ? category.name : "Không rõ",
+            name: food.name,
+            detail: food.detail,
+            price: parseInt(food.price),
+            isVegan: food.isVegan,
+            isGlutenFree: food.isGlutenFree,
+            totalRatings: food.totalRatings.toString(),
+            totalStars: food.totalStars.toString(),
+            img: `https://gateway.pinata.cloud/ipfs/${food.img}`
+          })
+        });
+
+        
+
+        
   
         setListFood(formatDataFood);
         setTemp(formatDataFood);
@@ -54,7 +66,6 @@ function Home() {
     }
     getData();
   }, []);
-  console.log(listFood);
   
 
   useEffect(() => {
@@ -91,6 +102,23 @@ function Home() {
   };
   }, []);
 
+  useEffect(() => {
+    const ref = filterRef.current;
+    if(!showFilterModal || !ref) return;
+
+    gsap.fromTo(ref, {
+      y: "100%",
+      opacity: .6,
+    }, {
+      duration: .5,
+      y: 0,
+      opacity: 1,
+      ease: "power3.in"
+    })
+
+
+  }, [showFilterModal]);
+
   const handleSearch = async () => {
 
     const idRes = new Set();
@@ -98,7 +126,8 @@ function Home() {
 
       const foods = await services.searchFood(searchQuery);
       // const restaurants = await services.searchRestaurants(searchQuery);
-
+      console.log(foods, 'sss');
+      
       if(foods.length > 0){
         const formatDataFood = foods.map((food) => ({
           id: food.id.toString(),
@@ -108,7 +137,7 @@ function Home() {
           isGlutenFree: food.isGlutenFree,
           totalRatings: food.totalRatings.toString(),
           totalStars: food.totalStars.toString(),
-          restaurantId: food.restaurantId.toString(),
+          // restaurantId: food.restaurantId.toString(),
           categoryId: food.categoryId.toString(),
           img: `https://gateway.pinata.cloud/ipfs/${food.img}`
         }));
@@ -124,7 +153,7 @@ function Home() {
           isGlutenFree: food.isGlutenFree,
           totalRatings: food.totalRatings.toString(),
           totalStars: food.totalStars.toString(),
-          restaurantId: food.restaurantId.toString(),
+          // restaurantId: food.restaurantId.toString(),
           categoryId: food.categoryId.toString(),
           img: `https://gateway.pinata.cloud/ipfs/${food.img}`
         }));
@@ -151,20 +180,31 @@ function Home() {
       )
     );
     setShowFilterModal(false);
+  }
 
-    
-  };
+  const handleClose = () => {
+    const ref = filterRef.current;
+    gsap.to(ref, {
+      duration: .5,
+      y: "100%",
+      opacity: .6,
+      ease: "power3.in",
+      onComplete: () => {
+        setShowFilterModal(false)
+      }
+    })
+  }
   
 
   return (
     <div className='Home'>
-      {showFilterModal && (
-        <div className='stylePopup-bottom' style={{height: 500}}>
+      {/* {showFilterModal && (
+        <div ref={filterRef} className='stylePopup-bottom p-4' style={{height: 500}}>
           <div className="" style={{
             position: "absolute",
             top: "3%",
             right: "5%",
-          }} onClick={() => setShowFilterModal(false)}>
+          }} onClick={() => handleClose()}>
             <Icon name="iconTimes"/>
           </div>
           <Form className='mx-3 my-4'>
@@ -187,7 +227,6 @@ function Home() {
               </div>
             </Form.Group>
 
-            {/* Dropdown chọn Category */}
             <Form.Group className="mb-3">
               <Form.Label>🍽 Danh sách loại thức ăn:</Form.Label>
               <Form.Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
@@ -200,7 +239,6 @@ function Home() {
               </Form.Select>
             </Form.Group>
 
-            {/* Min Rating */}
             <Form.Group className="mb-3">
               <Form.Label>⭐ Đánh giá thấp nhất:</Form.Label>
               <Form.Select value={minRating} onChange={(e) => setMinRating(Number(e.target.value))}>
@@ -210,7 +248,6 @@ function Home() {
               </Form.Select>
             </Form.Group>
 
-            {/* Checkboxes */}
             <Form.Check
               type="checkbox"
               label={`🌱 thực phẩm chay`}
@@ -230,8 +267,8 @@ function Home() {
               <span className='text-white fs-5 text-capitalize'>lọc</span>
           </BtnConfirm>
         </div>
-      )}
-      <div className="py-3">
+      )} */}
+      {/* <div className="py-3">
         <div className="search">
           <input
             type="search"
@@ -243,9 +280,8 @@ function Home() {
           <div className="search_icon" onClick={() =>  handleSearch()}>
             <Icon name="iconSearch"/>
           </div>
-          {/* <Button style={{width: "120px"}} variant="secondary" className="px-4 text-capitalize" onClick={() => setShowFilterModal(true)}>lọc</Button> */} 
         </div>
-        <div className="d-flex ps-3 pt-2" onClick={() => setShowFilterModal(true)}>
+        <div className="filter d-flex ps-3 pt-2" onClick={() => setShowFilterModal(true)}>
           <div className="me-3">
             <Icon name="iconFilter" size={16}/>
           </div>
@@ -253,10 +289,12 @@ function Home() {
             Lọc nâng cao
           </span>
         </div>
-      </div>
+      </div> */}
+
       <div className="">
         <FoodItem listFood={listFood}/>
       </div>
+
 
     </div>
   )

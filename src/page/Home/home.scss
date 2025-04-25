@@ -2,8 +2,12 @@
 
 .Home {
     height: 100%;
+    
     @include screen_laptop(){
         padding: 50px;
+    }
+    @include screen_tablet(){
+        padding: 25px;
     }
     @include screen_mobile(){
         padding: 0 20px;
@@ -14,28 +18,42 @@
         }
     }
 
-    .search{
-        position: relative;
-        input{
-            height: 40px;
-            border: none;
-            border-radius: 18px;
-            padding: 20px;
+    // .filter{
+    //     font-size: 16px;
+    //     font-weight: bold;
+    //     margin: 10px 0;
+    //     width: 20%;
+    //     @include screen_mobile(){
+    //         width: 50%;
+    //     }
+    //     @include screen_tablet(){
+    //         width: 30%;
+    //     }
+    //     cursor: pointer;
+    // }
+    // .search{
+    //     position: relative;
+    //     input{
+    //         height: 40px;
+    //         border: none;
+    //         border-radius: 18px;
+    //         padding: 20px;
 
-            &:focus {
-                outline: none;
-            }
-        }
-        &_icon{
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: 0;
-            right: 0;
-            width: 60px;
-            height: 40px;
-            border-radius: 20px;
-        }
-    }
+    //         &:focus {
+    //             outline: none;
+    //         }
+    //     }
+    //     &_icon{
+    //         position: absolute;
+    //         display: flex;
+    //         justify-content: center;
+    //         align-items: center;
+    //         top: 0;
+    //         right: 0;
+    //         width: 60px;
+    //         height: 40px;
+    //         border-radius: 20px;
+    //         cursor: pointer;
+    //     }
+    // }
 }

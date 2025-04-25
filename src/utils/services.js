@@ -2,18 +2,19 @@ import Web3 from "web3";
 import contractData from "../constract/Bookfood.json";
 
 const abi = contractData.abi;
-const contractAddress = "0x5Cbe584f2D4dba38F399E940D42272289A26D26B";
+const contractAddress = "0xcB2577Fb51c3E0ff177D46925E32AC2F5df51274";
 const rpcURL = "http://127.0.0.1:8545"; // Ganache RPC
 const wsURL = "ws://127.0.0.1:8545"
 let web3Instance;
 let contractInstance;
 let accountInstance;
 
+
 const initialize = async () => {
     if (!web3Instance) {
         // web3Instance = new Web3(new Web3.providers.HttpProvider(rpcURL));
         web3Instance = new Web3(new Web3.providers.WebsocketProvider(wsURL));
-        
+
         const privateKey = localStorage.getItem("privateKey");
         if (!privateKey) {
             throw new Error("Private Key chưa được nhập!");
@@ -31,7 +32,7 @@ const sendTransaction = async (methodName, ...params) => {
         const { web3, contract, account } = await initialize();
         const method = contract.methods[methodName](...params);
         const gas = await method.estimateGas({ from: account.address });
-        const gasWithBuffer = Math.floor(Number(gas) * 1.5);
+        const gasWithBuffer = Math.floor(Number(gas) * 1.2);
         const txData = await method.send({
             from: account.address,
             gas: gasWithBuffer,
@@ -171,29 +172,29 @@ const services = {
     listenForOrderPlaced: async (callback) => {
         try {
             const { contract } = await initialize();
-    
+
             // Thiết lập trình lắng nghe sự kiện OrderPlaced
             const orderPlacedEvent = contract.events.OrderPlaced({
                 fromBlock: 'latest' // Lắng nghe các event mới nhất
             });
-    
+
             // Xử lý sự kiện khi nó được phát ra
             orderPlacedEvent.on('data', (event) => {
                 console.log("Event OrderPlaced được phát ra:", event.returnValues);
                 // Gọi callback function với dữ liệu của event
                 callback(event.returnValues);
             });
-    
+
             // Xử lý lỗi trong quá trình lắng nghe
             orderPlacedEvent.on('error', (error) => {
                 console.error("Lỗi khi lắng nghe event OrderPlaced:", error);
             });
-    
+
             console.log("Đang lắng nghe sự kiện OrderPlaced...");
-    
+
             // Trả về đối tượng event để có thể hủy đăng ký sau này nếu cần
             return orderPlacedEvent;
-    
+
         } catch (error) {
             console.error("Lỗi khi thiết lập lắng nghe event OrderPlaced:", error);
             throw error;
@@ -201,7 +202,7 @@ const services = {
     },
 
 
-    listenForAddFood: (callback) => { 
+    listenForAddFood: (callback) => {
         initialize().then(({ contract }) => {
             const foodEvent = contract.events.FoodAdded({
                 fromBlock: 'latest'
@@ -212,6 +213,7 @@ const services = {
                 callback(event.returnValues);
             });
 
+            
             foodEvent.on('error', (error) => {
                 console.error("Lỗi khi lắng nghe event FoodAdded:", error);
             });
@@ -227,35 +229,40 @@ const services = {
         return null;
     },
 
-    listenForPlaceOrder: (callback) => {
-        initialize().then(({ contract }) => {
-            const orderEvent = contract.events.OrderPlacedEvent({
-                // filter: { customer: customerAddress }
-                fromBlock: 'latest'
-            });
+    listenForPlaceOrder: async (callback) => {
+        try {
+            const { contract, account } = await initialize();
+            if (contract && contract.events && contract.events.OrderPlacedEvent) {
+                const listener = contract.events.OrderPlacedEvent({
+                    filter: { customer: account.address },
+                    fromBlock: 'latest'
+                })
+                listener.on('data', (event) => {
+                    console.log("đang lắng nghe sự kiện OrderPlacedEvent.", event.returnValues);
+                    callback(event.returnValues)
+                })
+                
+                if (listener) {
+                    return () => {
+                        listener.unsubscribe();
+                        console.log("Đã hủy đăng ký lắng nghe sự kiện OrderPlacedEvent.");
+                    };
+                } else {
+                    console.warn("Không tạo được listener, không có gì để hủy đăng ký.");
+                    return () => {};
+                }
 
-            orderEvent.on('data', (event) => {
-                console.log("Event OrderPlacedEvent được phát ra:", event.returnValues);
-                // Gọi callback để thông báo về sự kiện, không lưu data trực tiếp tại đây
-                callback(event.returnValues);
-            });
-
-            orderEvent.on('error', (error) => {
-                console.error("Lỗi khi lắng nghe event OrderPlacedEvent:", error);
-                // Xử lý lỗi nếu cần
-            });
-
-            console.log("Đang lắng nghe sự kiện OrderPlacedEvent...");
-
-            // Trả về đối tượng subscription để có thể hủy đăng ký sau này nếu cần
-            return orderEvent;
-        }).catch(error => {
+            } else {
+                console.log("Không thể đăng ký lắng nghe sự kiện OrderPlacedEvent (WebSocket Contract chưa khởi tạo).");
+                return () => { };
+            }
+        } catch (error) {
             console.error("Lỗi khi khởi tạo để lắng nghe event OrderPlacedEvent:", error);
-        });
-        return null;
+            return () => {};
+        }
     },
 
-    
+
 };
 
 export default services;

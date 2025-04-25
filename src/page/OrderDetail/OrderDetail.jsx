@@ -6,6 +6,7 @@ import validJson from "../../utils/validJson";
 import { data, useNavigate, useParams } from "react-router-dom";
 import BtnConfirm from "../../cpns/BtnConfirm/BtnConfirm";
 import Icon from "../../utils/Icon";
+import BtnBack from "../../cpns/BtnBack/BtnBack";
 
 function OrderDetail() {
     const { id } = useParams();
@@ -104,9 +105,7 @@ function OrderDetail() {
         <Container className="pt-4">
             <div className="d-flex justify-content-between">
                 <h2>Chi Tiết Đơn Hàng</h2>
-                <div className="col-1" onClick={() => navigate(-1)}>
-                        <Icon name="iconArrowLeft" size="14" />
-                </div>
+                <BtnBack />
             </div>
             <Table striped bordered hover size="sm">
                 <thead className="text-capitalize">

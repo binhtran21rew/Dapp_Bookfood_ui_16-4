@@ -18,8 +18,13 @@ import { t } from "i18next";
 import { Links } from "../../utils/constant";
 import {getFoodTypes} from '../../utils/functionUtils';
 
-import { addOrderData } from "../../context/slice/orderSlice";
+import { 
+  addOrderData,
+  updateItemQuantity, 
+  getItemId, 
+} from "../../context/slice/orderSlice";
 import BtnConfirm from "../../cpns/BtnConfirm/BtnConfirm";
+import BtnBack from "../../cpns/BtnBack/BtnBack";
 
 // gsap.registerPlugin(ScrollTrigger);
 
@@ -33,6 +38,7 @@ function Food() {
     // const { id } = useParams();
   
     const foodRef = useRef(null);
+    const btnRef = useRef(null);
 
     const [restaurants, setRestaurants] = useState([]);
     const [foodRestaurant, setFoodRestaurant] = useState([]);
@@ -71,7 +77,7 @@ function Food() {
     //   })
 
     // }, [])
-  
+    
     
     useEffect(() => {
       if (!food) {
@@ -80,9 +86,35 @@ function Food() {
       }
       setTypeFood(getFoodTypes(food));
       setTotalStars(Number(food.totalStars));
+      dispatch(getItemId({id: food.id, food: food}))
       setTotalRatings(Number(food.totalRatings));
       setAverageRating(totalRatings > 0 ?  (totalStars / totalRatings).toFixed(1) : null )
     }, [food, navigate, totalRatings, totalStars]);
+
+    useEffect(() => {
+      const ref = btnRef.current;
+      if(!popup || !ref) return;
+
+      gsap.fromTo(ref, {
+        y: 100,
+        opacity: .6
+      }, {
+          duration: .5,
+          y: 0,
+          opacity: 1,
+          ease: "power2.out"
+      })
+
+    }, [popup]);
+
+    useEffect(() => {
+      if(orderSelector.data.length === 0) return;
+      const total = orderSelector.data.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const order = orderSelector.data.reduce((sum, item) => sum + item.quantity, 0);
+
+      setTotalOrder(order);
+      setTotalPrice(total);
+    }, [orderSelector.data]);
 
     // useEffect(() => {
     
@@ -120,21 +152,38 @@ function Food() {
     }
     
 
-    useEffect(() => {
-      if(orderSelector.data.length === 0) return;
-      const total = orderSelector.data.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      const order = orderSelector.data.reduce((sum, item) => sum + item.quantity, 0);
-
-      setTotalOrder(order);
-      setTotalPrice(total);
-    }, [orderSelector.data]);
-
     
+
+    const handleChangeQuanitiy = (id, type) =>{
+      const cartUpdate = orderSelector.data.find(item => item.id === id);
+      
+      if(!cartUpdate) {
+        if(type === "in"){
+          setPopup(true);
+          dispatch(addOrderData({ ...food}));
+        }
+        
+        return;
+      };
+
+      let newQuantity = cartUpdate.quantity;
+      console.log(newQuantity);
+      
+      if(type === 'de'){
+        newQuantity = Math.max(0, newQuantity - 1);
+      }else{
+        newQuantity = newQuantity + 1;
+      }
+
+      dispatch(updateItemQuantity({id: id, quantity: newQuantity}));
+      dispatch(getItemId({id: id}));
+
+    }
     
     return (
         <div className="Restaurant">
-            {width <= 420 && popup && orderSelector.data.length !== 0 && (
-              <div className="stylePopup-bottom" style={{padding: "10px 0"}}>
+            {popup && orderSelector.data.length !== 0 && (
+              <div ref={btnRef} className="stylePopup-bottom" style={{padding: "10px 0"}}>
                 <BtnConfirm  radius={28} className="d-flex justify-content-between align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
                   <div className="d-flex align-items-center" >
                     <span className="text-white fw-bold fs-5">Giỏ hàng</span>
@@ -149,8 +198,8 @@ function Food() {
               top: "1%",
               left: "5%"
             }}>
-                <div className="col-1" onClick={() => navigate(-1)}>
-                    <Icon name="iconArrowLeft" size="20" />
+                <div className="col-1" onClick={() => navigate(Links["home"])}>
+                  <BtnBack />
                 </div>
             </div>
             <div ref={foodRef} className="Restaurant_food" >
@@ -158,52 +207,69 @@ function Food() {
                 <div className="foodItem_img">
                     <img src={food?.img} alt={food?.name} width={"100%"} />
                 </div>
-                <div className="foodItem_title fw-bold text-capitalize">
-                    <span>{food?.name}</span>
-                    <div className="foodItem_title_icon">
-                      {food?.isVegan &&
-                        <span><Icons name="iconSeed" color="green"/></span>
-                      }
-                      {!food?.isGlutenFree &&
-                        <span><Icons name="iconGluten" color="green"/></span>
-                      }
-                      {food?.isGlutenFree &&
-                        <span><Icons name="iconGluten" color="red"/></span>
-                      }
+                <div className="styleLine d-flex flex-column">
+                  <div className="foodItem_title fw-bold text-capitalize">
+                      <span>{food?.name}</span>
+                      <div className="foodItem_title_icon">
+                        {food?.isVegan &&
+                          <span><Icons name="iconSeed" color="green"/></span>
+                        }
+                        {!food?.isGlutenFree &&
+                          <span><Icons name="iconGluten" color="green"/></span>
+                        }
+                        {food?.isGlutenFree &&
+                          <span><Icons name="iconGluten" color="red"/></span>
+                        }
+                      </div>
+                  </div>
+                  <div className="my-3">
+                    <span className="text-uppercase fw-bold">
+                      {numeral(food?.price).format('0,0 ')} vnđ
+                    </span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex">
+                      <span className="fw-bold">Điểm đánh giá:</span>
+                      <div className="ms-3"/>
+                      {!averageRating && (
+                        <span className="text-capitalize">chưa có đánh giá  ⭐ ({totalRatings})</span>
+                      )}
+                      {averageRating && (
+                        <span className="text-capitalize">{averageRating} ⭐ ({totalRatings})</span>
+                      )}
                     </div>
-                </div>
-                <div>
-                  <span className="text-uppercase">
-                    {numeral(food?.price).format('0,0 ')} vnđ
-                  </span>
-                </div>
-                <div className="d-flex justify-content-between align-items-center">
-                  {!averageRating && (
-                    <span className="text-capitalize">chưa có đánh giá  ⭐ ({totalRatings})</span>
-                  )}
-                  {averageRating && (
-                    <span className="text-capitalize">{averageRating} ⭐ ({totalRatings})</span>
-                  )}
-                  <div className="style_icon_add mx-2" onClick={() => handleBuy(food)}>
-                    <Icon name="iconPlus" color="white" size="16"/>
+
+
+                    <div className="cart_item_quantity d-flex justify-content-center align-items-center">
+                      <div className="style_icon_add" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'de')}>
+                        <Icon name="iconMinus" size="10" color="white"/>
+                      </div>
+                      <span className="cart_item_text text-primary fw-bold mx-2 fs-5">
+                        {orderSelector.item.quantity || 0}
+                      </span> 
+                      <div className="style_icon_add" style={{width: 20, height: 20}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'in')}>
+                        <Icon name="iconPlus" size="10" color="white"/>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <span className="fw-bold">Mô tả món ăn:</span> <br/>
+                    <div className="mt-2"/>
+                    <span>{food?.detail}</span>
+                  </div>
+                  <div className="mt-3">
+                    <span className="fw-bold">Chú thích:</span>
+                    <ul>
+                      {typeFood?.map((data, id) => (
+                        <li key={id}>{data}</li>
+                      ))}
+                    </ul>
+
                   </div>
                 </div>
-
-                <div className="mt-3">
-                  <span className="fw-bold">Mô tả món ăn:</span> <br/>
-                  <div className="mt-2"/>
-                  <span>{food?.detail}</span>
-                </div>
-                <div className="mt-3">
-                  <span className="fw-bold">Chú thích:</span>
-                  <ul>
-                    {typeFood?.map((data, id) => (
-                      <li key={id}>{data}</li>
-                    ))}
-                  </ul>
-                  {/* <li>{getFoodTypes(food?.isGlutenFree)}</li>
-                  <li>{getFoodTypes(food?.isVegan)}</li> */}
-
+                <div className="style_rotate_icon_add mx-2 btnFood" onClick={() => handleBuy(food)}>
+                  <Icon name="iconPlus" color="white" size="16"/>
                 </div>
               </div>
             </div>

@@ -1,0 +1,153 @@
+@use "../../scss/" as *;
+
+.CarouselItem {
+  .swiper-slide{
+    @include screen_tablet(){
+      // margin: 0 50px 0 0;
+    }
+    @include screen_mobile(){
+      width: 40% !important;
+    }
+  }
+
+  .Food_content_item{
+    flex: 0 0 auto;
+    width: 60%;
+
+    @include screen_mobile(){
+      width: 100%;
+    }
+
+    .food_style_wrapper{
+
+      .item-wrapper{
+        &:first-child{
+          display: flex;
+          position: relative;
+          justify-content: center;
+          top: -10px;
+          z-index: 2;
+          // border: 1px solid red;
+          .food_image{
+            width: 190px;
+            height: 190px;
+
+            @include screen_mobile(){
+              width: 120px;
+              height: 120px;
+            }
+          }
+
+        }
+        &:last-child{
+          display: flex;
+          position: relative;
+          justify-content: center;
+          bottom: 100px;
+          left: 20px;
+          z-index: 1;
+          width: 140px;
+          height: 250px;
+          background-color: rgb(255, 255, 255);
+          margin: 0 10px;
+          padding: 5px;
+          border-radius: 97px;
+          box-shadow: 0 0 10px rgba(8, 8, 8, 0.2);
+
+
+          @include screen_mobile(){
+            bottom: 50px;
+            left: 2px;
+            width: 120px;
+            height: 220px;
+          }
+          .food_style_title{
+            position: relative;
+            text-align: center;
+            align-content: flex-end;
+              .food_name {
+                font-size: 16px;
+                text-transform: capitalize;
+                font-weight: bold;
+
+                @include screen_mobile(){
+                  padding: 0 5px;
+                  font-size: 14px;
+                }
+              }
+              .food_detail {
+                margin-top: 10px;
+                font-size: 12px;
+
+                @include screen_mobile(){
+                  
+                  font-size: 9px;
+                }
+              }
+              
+              .food_price{
+                @include screen_mobile(){
+                  
+                  font-size: 12px;
+                }
+              }
+
+
+            .item-button {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 30px;
+              height: 30px;
+              background-color: $color-black;
+              border-radius: 50%;
+              z-index: 9;
+              cursor: pointer;
+              span {
+                color: $color-white;
+              }
+              .icon {
+                display: flex;
+              }
+            }
+            
+          }
+        }
+      }
+    }
+  }
+  .Food_content{
+    @include screen_mobile(){
+      display: none !important;
+    }
+    &_title{
+      display: block;
+      line-height: 1.1;
+      font-weight: 800;
+      @include screen_laptop(){
+        width: 70%;
+      }
+
+      @include screen_tablet(){
+        width: 100%;
+      }
+    }
+
+    &_detail{
+      display: block;
+      // line-height: 1.1;
+      @include screen_laptop(){
+        width: 70%;
+        
+      }
+
+      @include screen_tablet(){
+        width: 100%;
+      }
+    }
+  }
+  @include screen_mobile() {
+
+  }
+
+}

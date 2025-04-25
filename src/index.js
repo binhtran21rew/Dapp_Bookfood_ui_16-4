@@ -8,6 +8,8 @@ import store from './context/store';
 
 
 import './utils/i18n';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 

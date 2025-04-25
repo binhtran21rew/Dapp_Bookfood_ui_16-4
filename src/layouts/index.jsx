@@ -1,33 +1,61 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
-
+import { ToastContainer, toast } from 'react-toastify';
 
 import { Links } from '../utils/constant';
 import Icon from '../utils/Icon';
 import services from '../utils/services';
+import { Button } from 'react-bootstrap';
+import {resetLastItem, updateLastItem} from '../context/slice/orderSlice';
+import { AnimatePresence } from 'framer-motion';
+
+
+const orderEventChannel = new BroadcastChannel('order_placed_events');
 
 function MainLayout() {
 
 	const location = useLocation();
 	const navigate = useNavigate();
+
 	const pageOrder = location.pathname.startsWith(Links['orders']);
 	const pageOrderDetail = location.pathname.startsWith(Links['orderDetail']);
 	
 	const pageCart = location.pathname === Links['carts'];
     var orderSelector = useSelector((state) => state.order);
+    const dispatch = useDispatch();
+
+	const orderRef = useRef(null); 
 
 	const [restaurantNumber, setRestaurantNumber ] = useState([]);
 	const [restaurant, setRestaurant] = useState([]);
 	const [expand, setExpand] = useState(false);
-	const orderRef = useRef(null); 
+
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+
+	}, []);
 
 	useEffect(() => {
 		if(orderSelector.data.length === 0 ) return;
 		setRestaurantNumber([...new Set(orderSelector.data.map(item => item.restaurantId))])
 
 	}, [orderSelector.data]);
+
+	
+	
+	useEffect(() => {
+		console.log("truoc", orderSelector.lastItem);
+		if(!orderSelector.lastItem) return;
+		console.log("sau", orderSelector.lastItem);
+		
+		toast.success(`Đơn hàng mới đã cập nhật ${orderSelector.lastItem}`);
+		return () => {
+			dispatch(resetLastItem());
+		}
+	}, [orderSelector.lastItem]);
 
 	// useEffect(() => {
 	// 	if(restaurantNumber.length === 0) return;
@@ -42,41 +70,7 @@ function MainLayout() {
 	// 	getRes();
 	// }, [restaurantNumber]);
 
-	useEffect(() => {
-		let orderEventSubscription;
-		const subscribeToOrderAdded = async () => {
-			orderEventSubscription = await services.listenForPlaceOrder((order) => {
-				console.log("listen order page chính:", order);
-				
-				// const formatDataFood = {
-				// 	id: food.id.toString(),
-				// 	name: food.name,
-				// 	detail: food.detail,
-				// 	price: parseInt(food.price),
-				// 	isVegan: food.isVegan,
-				// 	isGlutenFree: food.isGlutenFree,
-				// 	totalRatings: food.totalRatings.toString(),
-				// 	totalStars: food.totalStars.toString(),
-				// 	categoryId: food.categoryId.toString(),
-				// 	img: `https://gateway.pinata.cloud/ipfs/${food.img}`
-				// };
-				// setListFood((prev) => {
-				// 	if (!prev.find(item => item.id === formatDataFood.id)) {
-				// 		return [...prev, formatDataFood];
-				// 	}
-				// 	return prev;
-				// });
-			});
-		};
-		subscribeToOrderAdded();
-		return () => {
-		  if (orderEventSubscription && orderEventSubscription.removeAllListeners) {
-			  orderEventSubscription.removeAllListeners('data');
-			  orderEventSubscription.removeAllListeners('error');
-			  console.log("Đã hủy đăng ký lắng nghe sự kiện OrderAdded.");
-		  }
-	  };
-	  }, []);
+
 	// const handleClick = (type, idRes) => {
 
 	// 	const currentRef = orderRef.current;
@@ -135,19 +129,23 @@ function MainLayout() {
 		
 	// }
 
-
+	
+	// console.log(orderSelector.lastItem);
 	
 	
 	return (
 		<div className={`bg_main`} style={{position: 'relative'}}>
 			<Outlet />
-			{!pageCart && !pageOrder && !pageOrderDetail &&(
-				<div className="styleSticky_topRight" style={{top: "8%"}}>
+			<div className="grid place-items-center h-dvh bg-zinc-900/15">
+				<ToastContainer />
+			</div>
+			{/* {!pageCart && !pageOrder && !pageOrderDetail &&(
+				<div className="styleSticky_topRight" style={{top: "8%", boxShadow: "0 0 5px rgba(93, 93, 93, 0.8)", zIndex: 999}}>
 					<div className='styleCenter' onClick={() => navigate(Links['carts'])}>
 						<Icon name="iconCart" color="green"/>
 					</div>
 				</div>
-			)}
+			)} */}
 			{/* {orderSelector.data.length > 0 && !pageOrder &&(
 				<div ref={orderRef} className="styleSticky_bottomRight" >
 					<div className='iconTime' style={{
@@ -199,6 +197,7 @@ function MainLayout() {
 			)}  */}
 
 		</div>
+
 	)
 }
 

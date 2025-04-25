@@ -14,13 +14,17 @@ import {
     faTicket,
     faShop,
     faTimes,
-    faFilter
+    faFilter,
+    faArrowRight
 } from "@fortawesome/free-solid-svg-icons";
 
 
 function Icon({...props}) {
     const {name, color, size} = props;
     switch(name){
+        case "iconArrowRight": return(
+            <FontAwesomeIcon icon={faArrowRight} fontSize={size ?? 20} color={color ?? "black"}/>
+        )
         case "iconFilter": return(
             <FontAwesomeIcon icon={faFilter} fontSize={size ?? 20} color={color ?? "black"}/>
         )
