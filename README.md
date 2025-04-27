@@ -28,8 +28,6 @@
 2.  **Cài đặt các dependency:**
     ```bash
     npm install
-    # hoặc
-    yarn install
     ```
 
 3.  **Cấu hình Smart Contract:**
@@ -43,8 +41,6 @@
 5.  **Chạy dự án:**
     ```bash
     npm start
-    # hoặc
-    yarn start
     ```
     Dự án sẽ được chạy trên trình duyệt của bạn tại địa chỉ `http://localhost:3000` (hoặc một cổng khác nếu được cấu hình).
 
