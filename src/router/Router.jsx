@@ -3,7 +3,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 
-import { foodVariants, homeVariants, Links } from '../utils/constant'
+import { foodChangeVariants, foodVariants, homeVariants, Links } from '../utils/constant'
 
 import MainLayout from '../layouts';
 import Loadpage from '../cpns/Loadpage';
@@ -14,10 +14,14 @@ import Order from '../page/Order/Order';
 import Food from '../page/Food/Food';
 import Carts from '../page/Cart/Cart';
 import OrderDetail from '../page/OrderDetail/OrderDetail';
+import FoodChange from '../page/FoodChange/FoodChange';
+
 
 function AppRouter() {
   const location = useLocation();
   const navigate = useNavigate();
+
+
   // useEffect(() => {
   //   if (navigate && navigate.scrollRestoration) {
   //     navigate.scrollRestoration = 'manual';
@@ -29,6 +33,9 @@ function AppRouter() {
   //     }
   //   };
   // }, [navigate]);
+
+
+
 
   return (
     <AnimatePresence mode="wait"> 
@@ -47,7 +54,14 @@ function AppRouter() {
                 ><Food /></Loadpage>} />
               <Route  path={`${Links['carts']}`} element={<Loadpage><Carts /></Loadpage>} />
               <Route  path={`${Links['orderDetail']}/:id`} element={<Loadpage><OrderDetail /></Loadpage>} />
+              <Route  path={`${Links['foodChange']}`} element={
+                <Loadpage variants={foodChangeVariants}>
+                  <FoodChange />
+                </Loadpage>} 
+              
+              />
 
+              
           </Route>
       </Routes>
     </AnimatePresence>

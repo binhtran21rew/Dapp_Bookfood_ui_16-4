@@ -10,13 +10,13 @@ import './carouselitem.scss';
 
 import Icon from "../../utils/Icon";
 import { foodContent, Links } from "../../utils/constant";
-import { addOrderData } from "../../context/slice/orderSlice";
-//Ilovebebank
+import { addOrderData,  getItemId, resetItem, } from "../../context/slice/orderSlice";
+
 
 
 
 function CarouselItem({...props}) {
-    const {listFood, setPopup, text, detail, positionRef} = props;
+    const {listFood,  text, detail, positionRef} = props;
     const navigate = useNavigate();
 
     var orderSelector = useSelector((state) => state.order);
@@ -64,11 +64,17 @@ function CarouselItem({...props}) {
         navigate(`${Links['food']}`, {state: {food}})
     }
 
-    const handleBuy = (e, food) => {
+    const handleBuy = (e, item) => {
         e.stopPropagation(); 
-        setPopup(true);
-        dispatch(addOrderData({ ...food}));
+        // setPopup(true);
+        // dispatch(addOrderData({ ...food}));
+        dispatch(resetItem());
+        navigate(Links['foodChange'], {state: {food: item}});
+        
     }
+    
+
+    
     
   return (
     <div ref={positionRef} className='CarouselItem'>
@@ -78,8 +84,6 @@ function CarouselItem({...props}) {
                     slidesPerView={width <= 634 && 2 || width >= 1050 && 3 || 2} 
                     slidesPerGroup={1}
                     loop={true}
-                    modules={[Pagination]}
-                    pagination={true}
                     className='swiper_wrapper'
                 >
                     {listFood.map((item, id) => (
@@ -118,9 +122,9 @@ function CarouselItem({...props}) {
 
                 </Swiper>
             </div>
-            <div className="Food_content col-4 d-flex flex-column justify-content-center align-items-center px-3">
-                <span className='Food_content_title ' style={{fontSize: "24px"}}>{text}</span>
-                <span className='Food_content_detail d-flex flex-grow mt-3' style={{fontSize: "12px"}}>{detail}</span>
+            <div className="Food_content col-4 d-flex flex-column justify-content-center px-3">
+                <span className='Food_content_title'>{text}</span>
+                <span className='Food_content_detail d-flex flex-grow mt-3'>{detail}</span>
 
             </div>
 

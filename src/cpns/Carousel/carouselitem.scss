@@ -1,11 +1,18 @@
 @use "../../scss/" as *;
 
 .CarouselItem {
-  @include screen_tablet(){
-    div{
-      justify-content: space-between; 
+  div{
+    &:first-child{
+      @include screen_laptop_medium(){
+        justify-content: space-around; 
+      }
+      @include screen_tablet(){
+        justify-content: space-evenly; 
+      }
     }
   }
+
+  
 
   .Food_content_item{
     flex: 0 0 auto;
@@ -40,8 +47,8 @@
             height: 190px;
 
             @include screen_mobile(){
-              width: 120px;
-              height: 120px;
+              width: 140px;
+              height: 140px;
             }
           }
 
@@ -50,12 +57,12 @@
           display: flex;
           position: relative;
           justify-content: center;
-          bottom: 90px;
-          left: 8px;
+          bottom: 120px;
+          left: 0;
           z-index: 1;
-          width: 155px;
-          height: 250px;
-          background-color: rgb(255, 255, 255);
+          width: 180px;
+          height: 290px;
+          background-color: rgb(242, 242, 242);
           margin: 0 10px;
           padding: 5px;
           border-radius: 97px;
@@ -63,16 +70,17 @@
 
 
           @include screen_mobile(){
-            bottom: 50px;
-            bottom: 70px;
+            bottom: 80px;
             left: 2px;
-            width: 120px;
+            width: 130px;
             height: 220px;
           }
           .food_style_title{
             position: relative;
             text-align: center;
             align-content: flex-end;
+            margin: 10px 15px 0;
+
               .food_name {
                 font-size: 18px;
                 text-transform: capitalize;
@@ -84,7 +92,6 @@
                 }
               }
               .food_detail {
-                margin-top: 10px;
                 font-size: 12px;
 
                 @include screen_mobile(){
@@ -132,25 +139,34 @@
       display: block;
       line-height: 1.1;
       font-weight: 800;
+      width: 100%;
+
       @include screen_laptop(){
-        width: 70%;
+        font-size: 38px;
       }
 
       @include screen_tablet(){
-        width: 100%;
+        font-size: 28px;
+      }
+
+      @include screen_tablet_small(){
+        font-size: 26px;
       }
     }
 
     &_detail{
       display: block;
-      // line-height: 1.1;
+      width: 100%;
       @include screen_laptop(){
-        width: 70%;
-        
+        font-size: 18px;
       }
 
       @include screen_tablet(){
-        width: 100%;
+        font-size: 14px;
+      }
+
+      @include screen_tablet_small(){
+        font-size: 13px;
       }
     }
   }

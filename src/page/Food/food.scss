@@ -1,12 +1,8 @@
 @use '../../scss/' as *;
 .Restaurant{
     position: relative;
-    @include screen_tablet(){
-        padding: 50px;
-    }
-    @include screen_laptop(){
-        padding: 50px;
-    }
+    padding: 20px 50px;
+
     @include screen_mobile(){
         padding: 0 20px;
     }
@@ -48,10 +44,11 @@
 
             }
             .text-label{
-                // font-weight: bold;
                 text-transform: capitalize;
                 font-size: 16px;
-
+                color: $color-black;
+                font-weight: 500;
+                opacity: .7;
                 @include screen_laptop(){
                     font-size: 18px;
                 }
@@ -75,13 +72,13 @@
         .foodItem_img{
             @include screen_tablet(){
                 display: flex;
-                width: 450px;
-                height: 450px;
+                width: 550px;
+                height: 550px;
             }
             @include screen_laptop(){
                 display: flex;
-                width: 450px;
-                height: 450px;
+                width: 550px;
+                height: 550px;
             }
             @include screen_mobile(){
                 text-align: right;
@@ -89,21 +86,10 @@
         }
 
         .foodItem_title{
-            @include screen_tablet(){
-                display: flex;
-                justify-content: space-between;
-                font-size: 25px;
-            }
-            @include screen_laptop(){
-                display: flex;
-                justify-content: space-between;
-                font-size: 25px;
-            }
-            @include screen_mobile(){
-                display: flex;
-                justify-content: space-between;
-                font-size: 25px;
-            }
+            font-size: 35px;
+            display: flex;
+            justify-content: space-between;
+
 
             &_icon{
                 @include screen_mobile(){

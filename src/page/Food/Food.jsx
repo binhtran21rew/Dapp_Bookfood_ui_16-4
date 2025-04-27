@@ -169,7 +169,7 @@ function Food() {
 
     const handleChangeQuanitiy = (id, type) =>{
       const cartUpdate = orderSelector.data.find(item => item.id === id);
-      
+
       if(!cartUpdate) {
         if(type === "in"){          
           setPopup(true);
@@ -180,8 +180,6 @@ function Food() {
       };
 
       let newQuantity = cartUpdate.quantity;
-      console.log(123);
-      
       
       if(type === 'de'){
         newQuantity = Math.max(0, newQuantity - 1);
@@ -225,35 +223,11 @@ function Food() {
                 <div className="styleLine d-flex flex-column">
                   <div className="foodItem_title fw-bold text-capitalize">
                       <span>{food?.name}</span>
-                      <div className="foodItem_title_icon">
-                        {food?.isVegan &&
-                          <span><Icons name="iconSeed" color="green"/></span>
-                        }
-                        {!food?.isGlutenFree &&
-                          <span><Icons name="iconGluten" color="green"/></span>
-                        }
-                        {food?.isGlutenFree &&
-                          <span><Icons name="iconGluten" color="red"/></span>
-                        }
-                      </div>
-                  </div>
-
-                  <div className="d-flex justify-content-between align-items-center mt-3">
-                    <div className="d-flex">
-                      {!averageRating && (
-                        <span className="text-capitalize fw-bold" style={{fontSize: 16}}>chưa có đánh giá  ⭐ ({totalRatings})</span>
-                      )}
-                      {averageRating && (
-                        <span className="text-capitalize">{averageRating} ⭐ ({totalRatings})</span>
-                      )}
-                    </div>
-
-
-                    <div className="cart_item_quantity d-flex justify-content-center align-items-center">
+                      <div className="cart_item_quantity d-flex justify-content-center align-items-center">
                       <div className="style_icon_add" style={{width: 20, height: 20, borderRadius: "8px"}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'de')}>
                         <Icon name="iconMinus" size="10" color="white"/>
                       </div>
-                      <span className="cart_item_text text-primary fw-bold mx-3 fs-5">
+                      <span className="cart_item_text text-primary fw-bold mx-3 fs-5 text-black">
                         {orderSelector.item.quantity || 0}
                       </span> 
                       <div className="style_icon_add" style={{width: 20, height: 20, borderRadius: "8px"}} onClick={() => handleChangeQuanitiy(orderSelector.item.id, 'in')}>
@@ -262,16 +236,14 @@ function Food() {
                     </div>
                   </div>
 
-                  <div className="mt-3">
-                    <span className="text-label">Mô tả món ăn:</span> <br/>
-                    <div className="mt-2"/>
-                    <span>{food?.detail}</span>
+                  <div className="mt-5">
+                    <span className="text-label">{food?.detail}</span>
                   </div>
                   <div className="my-3 d-flex align-items-center">
-                    <span className="text-label">thời gian: </span>
+                    <span className="text-label">delivery time: </span>
                     <div className="me-3"/>
                     <div className="d-flex">
-                        <Icon name="iconClock" />
+                        <Icon name="iconClock2" />
                       <div className="me-3"/>
                       <span className="text-uppercase fw-bold">
                         {food?.time} phút
@@ -281,7 +253,7 @@ function Food() {
                   <div className="my-3 d-flex flex-column">
                     <span className="text-label">Tổng tiền: </span>
                     <div className="mt-3"/>
-                    <span className="text-label fw-bold fs-4">
+                    <span className="fw-bold fs-4">
                       ${numeral(food?.price).format('0,0 ')}
                     </span>
                   </div>

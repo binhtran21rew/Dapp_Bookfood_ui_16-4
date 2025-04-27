@@ -4,7 +4,7 @@
     height: 100%;
     
     @include screen_laptop(){
-        padding: 50px;
+        padding: 30px;
     }
     @include screen_tablet(){
         padding: 25px;

@@ -10,6 +10,8 @@ import services from '../utils/services';
 import { Button } from 'react-bootstrap';
 import {resetLastItem, updateLastItem} from '../context/slice/orderSlice';
 import { AnimatePresence } from 'framer-motion';
+import BtnConfirm from '../cpns/BtnConfirm/BtnConfirm';
+import numeral from 'numeral';
 
 
 const orderEventChannel = new BroadcastChannel('order_placed_events');
@@ -21,17 +23,22 @@ function MainLayout() {
 
 	const pageOrder = location.pathname.startsWith(Links['orders']);
 	const pageOrderDetail = location.pathname.startsWith(Links['orderDetail']);
+	const pageHome = location.pathname === Links['home'];
 	
 	const pageCart = location.pathname === Links['carts'];
     var orderSelector = useSelector((state) => state.order);
     const dispatch = useDispatch();
 
 	const orderRef = useRef(null); 
+	const btnRef = useRef(null);
 
 	const [restaurantNumber, setRestaurantNumber ] = useState([]);
 	const [restaurant, setRestaurant] = useState([]);
 	const [expand, setExpand] = useState(false);
     const [width, setWidth] = useState(window.innerWidth);
+
+	const [totalOrder, setTotalOrder] = useState(0);
+	const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
       const handleResize = () => {
@@ -58,12 +65,19 @@ function MainLayout() {
 
 	}, [orderSelector.data]);
 
+	useEffect(() => {
+		if(orderSelector.data.length === 0) return;
+		const total = orderSelector.data.reduce((sum, item) => sum + item.price * item.quantity, 0);
+		const order = orderSelector.data.reduce((sum, item) => sum + item.quantity, 0);
+
+		setTotalOrder(order);
+		setTotalPrice(total);
+	}, [orderSelector.data]);
+
 	
 	
 	useEffect(() => {
-		console.log("truoc", orderSelector.lastItem);
 		if(!orderSelector.lastItem) return;
-		console.log("sau", orderSelector.lastItem);
 		
 		toast.success(`Đơn hàng mới đã cập nhật ${orderSelector.lastItem}`);
 		return () => {
@@ -153,6 +167,18 @@ function MainLayout() {
 			<div className="grid place-items-center h-dvh bg-zinc-900/15">
 				<ToastContainer />
 			</div>
+
+			{pageHome && orderSelector.data.length !== 0 && (
+              <div ref={btnRef} className="FoodItem_mobile stylePopup-bottom">
+                <BtnConfirm  radius={28} className="d-flex justify-content-around  align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
+                  <div className="d-flex align-items-center" >
+                    <span className="text-white fw-bold fs-5">Giỏ hàng</span>
+                    <li className="text-white ms-3">{totalOrder} món</li>
+                  </div>
+                  <div className="text-white">${numeral(totalPrice).format('0,0 ')}</div>
+                </BtnConfirm>
+              </div>
+            )}
 			{/* {!pageCart && !pageOrder && !pageOrderDetail &&(
 				<div className="styleSticky_topRight" style={{top: "8%", boxShadow: "0 0 5px rgba(93, 93, 93, 0.8)", zIndex: 999}}>
 					<div className='styleCenter' onClick={() => navigate(Links['carts'])}>

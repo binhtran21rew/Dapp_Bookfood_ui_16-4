@@ -17,3 +17,21 @@
         @content;
     }
 }
+
+@mixin screen_laptop_large{
+    @media only screen and (min-width: 1340px){
+        @content;
+    }
+}
+
+@mixin screen_laptop_medium{
+    @media only screen and (min-width: 1024px) and  (max-width: 1430px){
+        @content;
+    }
+}
+
+@mixin screen_tablet_small {
+    @media only screen and (min-width: $width-small) and (max-width: 900px) {
+        @content;
+    }
+}

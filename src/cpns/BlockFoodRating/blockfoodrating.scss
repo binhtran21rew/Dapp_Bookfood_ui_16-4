@@ -1,0 +1,83 @@
+@use '../../scss/' as *;
+
+.BlockFoodRating{
+    display: none;
+    @include screen_mobile(){
+        display: block;
+        margin-top: 35px;
+    }
+    .foodrating_style_wrapper{
+        // position: relative;
+        .item-wrapper{
+            &:first-child{
+                position: relative;
+                z-index: 2;
+                .food_image{
+                    img{
+                        width: 190px;
+                    }
+                }
+            }
+            &:last-child{
+                // position: absolute;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                &::after{
+                    content: "";
+                    position: absolute;
+                    right: 5%;
+                    width: 46%;
+                    height: 130px;
+                    background-color: #ededed;
+                    border-radius: 0 48% 48% 0;
+      
+                }
+                &::before{
+                    content: "";
+                    position: absolute;
+                    left: 12%;
+                    width: 40%;
+                    height: 130px;
+                    background-color: #ededed;
+                    border-radius:  45% 0 0 45%;
+      
+                }
+                .food_style_title{
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: center;
+                    z-index: 2;
+
+
+                    .food_name{
+                        font-size: 18px;
+                        font-weight: bold;
+                        text-transform: capitalize;
+                    }
+
+                    .food_detail{
+                        font-size: 14px;
+                        color: $color-black;
+                        opacity: .7;
+                    }
+                }
+
+                .btn_rating{
+                    position: absolute;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    right: 8%;
+                    width: 28px;
+                    height: 28px;
+                    background-color: black;
+                    border-radius: 50%;
+                    z-index: 2;
+                  }
+            }
+        }
+    }
+}

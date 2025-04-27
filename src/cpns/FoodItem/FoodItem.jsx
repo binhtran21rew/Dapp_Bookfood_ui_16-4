@@ -13,6 +13,8 @@ import BtnConfirm from "../BtnConfirm/BtnConfirm";
 import {arrSlice, groupByCategory, getMaxRating} from '../../utils/functionUtils'
 import CarouselItem from "../Carousel/CarouselItem";
 import BlockFood from "../BlockFood/BlockFood";
+import BlockFoodRating from "../BlockFoodRating/BlockFoodRating";
+
 
 
 
@@ -31,7 +33,9 @@ function FoodItem({ ...props }) {
     const [blockFood, setBlockFood] = useState([]);
     const [blockFoodName, setBlockFoodName] = useState([]);
     const [foodsRating, setFoodsRating] = useState([]);
+
     const [popup, setPopup] = useState(false);
+
 
     const [totalOrder, setTotalOrder] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -70,11 +74,10 @@ function FoodItem({ ...props }) {
     }, [popup]);
 
     
-    
     return (  
         <div className="FoodItem"> 
-            {popup &&  orderSelector.data.length !== 0 && (
-              <div ref={btnRef} className="FoodItem_mobile stylePopup-bottom" style={{padding: "10px 0"}}>
+            {/* {orderSelector.data.length !== 0 && (
+              <div ref={btnRef} className="FoodItem_mobile stylePopup-bottom">
                 <BtnConfirm  radius={28} className="d-flex justify-content-around  align-items-center" onClick={() => navigate(`${Links['orders']}`)}> 
                   <div className="d-flex align-items-center" >
                     <span className="text-white fw-bold fs-5">Giỏ hàng</span>
@@ -83,9 +86,9 @@ function FoodItem({ ...props }) {
                   <div className="text-white">{numeral(totalPrice).format('0,0 ')} vnd</div>
                 </BtnConfirm>
               </div>
-            )}
+            )} */}
 
-            {popup && orderSelector.data.length !== 0 && (
+            {orderSelector.data.length !== 0 && (
                 <div className="FoodItem_cart styleSticky_topRight" style={{backgroundColor: "black", zIndex: 9999, borderRadius: "14px 8px 35px 12px"}} onClick={() => navigate(`${Links['orders']}`)}>
                     <div className="btnFood d-flex justify-content-center align-items-center w-100 h-100 pe-2">
                         <Icon name="iconCart" color="white"/>
@@ -98,14 +101,15 @@ function FoodItem({ ...props }) {
 
             <div className="block_food_style">
                 {foodsRating && (
-                    <BlockFood 
-                        food={foodsRating[0]}
-                        setPopup={setPopup}
-                        heightImage={"100%"}
-                        widthImage={"100%"}
-                        rating={true}
-                    />
+                    <>
+                        <BlockFoodRating 
+                            food={foodsRating[0]}
+                            setPopup={setPopup}
+                        />
+                    </>
                 )}
+
+
                 <BlockFood 
                     food={{
                         img: "https://gateway.pinata.cloud/ipfs/QmQuAVPHCocjWxkyrxnaqhSrYu27kwsLd3B8CjBLZa9q6d",
@@ -113,17 +117,17 @@ function FoodItem({ ...props }) {
                         title: "Delicous salads for you healthy life",
                         detail: "We made fresh and healthy salad with diffrent recipes"
                     }}
-                    setPopup={setPopup}
                     heightImage={"100%"}
                     widthImage={"100%"}
                     hightLight={true}
                     btn={true}
                     positionRef={positionRef}
+                    setPopup={setPopup}
+
                 />
                 <CarouselItem 
                     positionRef={positionRef}
-                    listFood={listFood} 
-                    setPopup={setPopup} 
+                    listFood={listFood}  
                     text={"We have delicous saladsin town"} 
                     detail={"Cepteur sint occaaecat cupidatat proident, taken possession of my entire soul, like these sweet mornings of spring which i enjoy with my whole"}
                 />
@@ -177,6 +181,8 @@ function FoodItem({ ...props }) {
                     </div>
                 ))} */}
             </div>
+    
+
 
             {/* <div className="block_foods">
                 {blockFood.map((data, index) => (

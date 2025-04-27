@@ -27,17 +27,12 @@
   }
   .FoodItem_cart{
     @include screen_mobile(){
+      top: unset;
+      bottom: 10%;
       display: none;
     }
   }
-  .FoodItem_mobile{
-    @include screen_laptop(){
-      display: none;
-    }
-    @include screen_tablet(){
-      display: none;
-    }
-  }
+
   // .block_food{
   //   display: none;
   //   @include screen_mobile(){

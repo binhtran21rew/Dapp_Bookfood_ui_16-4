@@ -1,0 +1,49 @@
+@use '../../scss/' as *;
+.FoodChange{
+    .popup_order{
+        position: relative;
+        .popup_order_image{
+            // position: relative;
+            width: 100%;
+            // z-index: 1;
+            img{
+
+                @include screen_laptop(){
+                    width: 40%;
+                }
+
+                @include screen_laptop_large(){
+                   width: 450px;
+                   height: 450px;
+                }
+
+                @include screen_laptop_medium(){
+                    width: 40%;
+                }
+
+                @include screen_tablet(){
+                    width: 50%;
+                }
+                @include screen_mobile(){
+                    width: 70%;
+                }
+            }
+        }
+        .popup_order_option{
+            // position: absolute;
+            // top: 60%;
+            // left: 0;
+            width: 100%;
+            padding: 50px 50px 100px;
+            box-shadow: 0 0 10px rgb(220, 220, 220);
+            background-color: rgb(220, 220, 220);
+            z-index: 2;
+
+            .text-label{
+                font-size: 16px;
+                font-weight: bold;
+                text-transform: capitalize;
+            }
+        }
+    }
+}

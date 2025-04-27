@@ -18,11 +18,14 @@ import {
     faArrowRight,
     faClock,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { CiClock2 } from "react-icons/ci";
 
 function Icon({...props}) {
     const {name, color, size} = props;
     switch(name){
+        case "iconClock2": return(
+            <CiClock2 fontSize={size ?? 20} color={color ?? "black"}/>
+        )
         case "iconClock": return(
             <FontAwesomeIcon icon={faClock} fontSize={size ?? 20} color={color ?? "black"}/>
         )

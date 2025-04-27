@@ -159,7 +159,8 @@ code {
   height: $height_popup;
   box-shadow: 0 0 5px $color-white-blur;
   background-color: $color-white;
-  z-index: 999;
+  z-index: 99;
+  transform: none;
 
   @include screen_laptop(){
     height: calc($height_popup - 10px);
@@ -255,6 +256,15 @@ code {
       color: white;
       font-size: 10px;
       font-weight: 800;
+  }
+}
+
+.FoodItem_mobile{
+  @include screen_laptop(){
+    display: none;
+  }
+  @include screen_tablet(){
+    display: none;
   }
 }
 

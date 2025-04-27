@@ -13,15 +13,18 @@ import services from '../../utils/services';
 import BtnConfirm from '../../cpns/BtnConfirm/BtnConfirm';
 import Icon from '../../utils/Icon'
 import BlockFood from '../../cpns/BlockFood/BlockFood';
+import { useSelector } from 'react-redux';
 
 
 function Home() {
 
   const [listFood, setListFood] = useState([]);
+  var orderSelector = useSelector((state) => state.order);
 
   const filterRef = useRef(null);
   const searchRef = useRef(null);
   const navCateRef = useRef([]);
+  const inputRef = useRef(null);
   const { width } = useOutletContext();
 
   const [temp, setTemp] = useState([]);
@@ -37,6 +40,7 @@ function Home() {
   const [foodCategories, setFoodCategories] = useState([]);
   const [nameCate, setNameCate] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
+
 
 
   useEffect(() => {
@@ -132,31 +136,34 @@ function Home() {
 
   const handleToogleSearch = () =>{
     const ref = searchRef.current;
-    
+    const input = inputRef.current;
 
     if(!isSearch){
       setIsSearch(true);
   
         gsap.fromTo(ref, {
           display: "flex",
-          y: "-100%",
+          x: "100%",
           opacity: .8
         }, {
           duration: .3,
-          y: 0,
+          x: 0,
           opacity: 1,
-          ease: "power3.in"
+          ease: "power3.in",
+          onComplete: () => {
+            input.focus();
+          }
         })
         
     }else{
       setIsSearch(false);
       gsap.fromTo(ref, {
-        y: 0,
+        x: 0,
         opacity: 1
       }, {
         duration: .3,
         display: "none",
-        y: "-100%",
+        x: "100%",
         opacity: .8,
         ease: "power3.in"
       })
@@ -173,7 +180,6 @@ function Home() {
 
       const foods = await services.searchFood(searchQuery);
       // const restaurants = await services.searchRestaurants(searchQuery);
-      console.log(foods, 'sss');
       
       if(foods.length > 0){
         const formatDataFood = foods.map((food) => ({
@@ -285,6 +291,9 @@ function Home() {
     setListFood(foodCategories[name]);
     setNameCate(name)
   }
+
+  console.log("orderSelector.data",orderSelector.data);
+  
   
   return (
     <div className='Home'>
@@ -384,6 +393,7 @@ function Home() {
         <div ref={searchRef} className="search">
           <div className="search_wrapper">
             <input
+              ref={inputRef}
               type="search"
               placeholder={`Tìm kiếm...`}
               className="me-2 w-100" 

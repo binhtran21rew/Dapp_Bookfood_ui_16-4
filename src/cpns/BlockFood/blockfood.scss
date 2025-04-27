@@ -8,122 +8,68 @@
     position: relative;
     display: flex;
     flex-direction: row-reverse;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
     padding: 14px;
 
     @include screen_tablet(){
-      padding: 50px 7%;
+      // padding: 50px 7%;
       
     }
 
-    &.rating{
-      @include screen_mobile(){
-        flex-direction: row !important;
-        justify-content: end;
-        width: 100%;
-        .foodRating_content{
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 120px;
-            width: 300px;
-
-            &::after{
-              position: absolute;
-              content: "";
-              width: 50%;
-              right: 0;
-              height: 120px;
-              background-color: #ededed;
-              border-radius: 0 50% 50% 0;
-
-            }
-            &::before{
-              position: absolute;
-              left: 0;
-              content: "";
-              width: 50%;
-              height: 120px;
-              background-color: #ededed;
-              border-radius:  50% 0 0 50%;
-
-            }
-
-            .food_style_title{
-              position: relative;
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;
-              margin-left: 50px;
-              z-index: 2;
-            }
-    
-            .food_detail_rating{
-              margin-top: 10px;
-              width: 100px;
-            }
-            .btn_rating{
-              position: absolute;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              right: 1%;
-              top: 40%;
-              width: 25px;
-              height: 25px;
-              background-color: black;
-              border-radius: 50%;
-              z-index: 2;
-            }
-      
-        }
-  
-
-        .foodRating_img{
-          position: absolute;
-          left: 0;
-          z-index: 3;
-          .food_image{
-            img{
-              width: 130px;
-              height: 130px;
-              @include screen_mobile(){
-                width: 160px;
-                height: 160px;
-              }
-            }
-
-          }
-        }
-      }
-    }
 
     .item-wrapper {
       @include screen_tablet(){
-        &.col-4{
-          flex: 0 0 auto !important;
-          width: 42% !important;
-        }
+        // &.col-4{
+        //   flex: 0 0 auto !important;
+        //   width: 42% !important;
+        // }
       }
       &.hightlight{
+        flex: 0 0 auto;
+        &:first-child{
+          @include screen_laptop(){
+            width: 57%;
+          }
+          @include screen_tablet(){
+            width: 57%;
+          }
+        }
+        &:last-child{
+          // @include screen_laptop_large(){
+          //   width: 40% !important; 
+          // }
+          @include screen_laptop(){
+            width: 38%;
+          }
+          @include screen_tablet(){
+            width: 38%;
+          }
+        }
 
         .food_style_title {
           .food_name {
             display: block;
-            width: 85%;
+            width: 100%;
             font-size: 36px;
             text-transform: capitalize;
             font-weight: 800;
             line-height: 1.1;
             @include screen_laptop(){
-
+              font-size: 74px;
+            }
+            @include screen_laptop_medium(){
+              font-size: 54px;
             }
             @include screen_tablet(){
               width: 100%;
-              font-size: 28px;
+              font-size: 44px;
+            }
+
+            @include screen_tablet_small(){
+              width: 100%;
+              font-size: 34px;
             }
           }
           .food_detail {
@@ -133,23 +79,89 @@
             font-size: 12px;
             color: $color-white-blur;
             font-weight: 800;
+            @include screen_laptop(){
+              font-size: 20px;
+            }
             @include screen_tablet(){
               width: 100%;
-              font-size: 12px;
+              font-size: 15px;
             }
           }
         }
 
+        .item-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 50px;
+          background-color: $color-black;
+          width: 180px;
+          padding: 5px 10px;
+          border-radius: 18px 18px 0 18px;
+          
+          cursor: pointer;
+          span {
+            color: $color-white;
+            font-size: 18px;
+            @include screen_laptop(){
+            }
+          }
+          .icon {
+            display: flex;
+            margin-left: 20px;
+            rotate: 180deg;
+          }
+        }
 
-      }
-
-      &:not(.hightlight){
         .food_image{
           img{
 
             @include screen_laptop(){
-              width: 350px;
-              height: 350px;
+              width: 95%;
+              height: 95%;
+            }
+
+            // @include screen_laptop_large(){
+            //   width: 85%;
+            //   height: 85%;
+            // }
+            @include screen_mobile(){
+              
+            }
+          }
+        }
+      }
+
+      &:not(.hightlight){
+        &:first-child{
+          @include screen_laptop(){
+            width: 40%;
+          }
+          @include screen_tablet(){
+            width: 40%;
+          }
+          @include screen_tablet_small(){
+            width: 50%;
+          }
+        }
+        &:last-child{
+          // @include screen_laptop_large(){
+          //   width: 40% !important; 
+          // }
+          @include screen_laptop(){
+            width: 55%;
+          }
+          @include screen_tablet(){
+            width: 55%;
+          }
+        }
+
+        .food_image{
+          img{
+
+            @include screen_laptop(){
+              // width: 350px;
+              // height: 350px;
             }
             @include screen_mobile(){
               
@@ -157,56 +169,51 @@
           }
         }
         .food_style_title {
+
           .food_name {
             display: block;
-            width: 75%;
-            font-size: 22px;
+            width: 90%;
             text-transform: capitalize;
             font-weight: 800;
             line-height: 1.1;
             
-
+            // @include screen_tablet(){
+            //   width: 90%;
+            //   font-size: 18px;
+            // }
+            @include screen_laptop(){
+              font-size: 38px;
+            }
+            @include screen_laptop_medium(){
+              font-size: 34px;
+            }
             @include screen_tablet(){
-              width: 90%;
-              font-size: 18px;
+              width: 100%;
+              font-size: 30px;
+            }
+
+            @include screen_tablet_small(){
+              width: 100%;
+              font-size: 24px;
             }
           }
           .food_detail {
             display: block;
             width: 78%;
             margin-top: 30px;
-            font-size: 12px;
+            font-size: 15px;
             color: $color-black;
             opacity: .7;
             font-weight: bold;
+            @include screen_tablet_small(){
+              width: 100%;
+              font-size: 12px;
+            }
           }
 
-          .food_detail_rating{
-            font-size: 12px;
-            color: $color-white-blur;
-            font-weight: bold;
-          }
         }
       }
-      .item-button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 50px;
-        background-color: $color-black;
-        width: 150px;
-        padding: 5px 10px;
-        border-radius: 18px 18px 0 18px;
-        cursor: pointer;
-        span {
-          color: $color-white;
-        }
-        .icon {
-          display: flex;
-          margin-left: 20px;
-          rotate: 180deg;
-        }
-      }
+
 
       .food_image {
 
