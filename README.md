@@ -1,43 +1,115 @@
-🚀 dapp bookfood
-📚 1. Tổng quan dự án
-Đây là một dự án dapp (ứng dụng phi tập trung) có tên là dapp bookfood.
+📚 Dapp BookFood
+Một dự án Dapp giúp đặt thức ăn qua blockchain.
 
-📂 2. Cấu trúc thư mục
-Cấu trúc thư mục của dự án được tổ chức như sau:
+📖 Mục lục
+Giới thiệu
 
-Src/
-├── assets/         # 🖼️ Chứa file animation, chứa ảnh động.
-├── constract/      # 📜 Chứa file json ABI (Application Binary Interface) của smart contract (smc).
-├── context/        # 🔄 Chứa file Redux để quản lý các global state của dự án.
-├── cpns/           # 🧩 Chứa các **component con** có thể tái sử dụng trong toàn bộ ứng dụng.
-├── layout/         # 🧱 Chứa các file **layout** chung cho các trang (page) hiện có.
-├── page/           # 📄 Chứa các file **trang (page)** chính của dự án.
-├── router/         # 🗺️ Chứa file **cấu hình route** (đường dẫn) cho ứng dụng.
-├── scss/           # 🎨 Chứa các file **SCSS** (Sass) để định kiểu giao diện.
-└── utils/          # 🛠️ Chứa các file **hàm hỗ trợ** (utility functions) được sử dụng trong dự án.
-🧩 3. Mô tả một số component quan trọng
-📂 Trong thư mục cpns/
-BlockFood: Component dùng để hiển thị thông tin chi tiết của một món ăn.
+Cấu trúc thư mục
 
-Nhận vào các props sau:
-food: Danh sách dữ liệu của món ăn cần hiển thị.
-widthImage, heightImage: Kích thước (chiều rộng và chiều cao) của hình ảnh món ăn.
-hightlight (boolean): Nếu là true, block sẽ được hiển thị nổi bật đặc biệt.
-btn (boolean): Nếu là true, sẽ hiển thị nút bấm trên block.
-BtnBack: Component đơn giản hiển thị một nút bấm "Trở về".
+Chi tiết Component
 
-BtnConfirm: Component hiển thị một nút bấm "Xác nhận" (Submit).
+Chi tiết Service
 
-Carousel: Component tạo một slider (thanh trượt) để hiển thị danh sách thức ăn.
+Yêu cầu hệ thống
 
-Nhận vào các props sau:
-listfood: Danh sách các món ăn cần hiển thị trong carousel.
-text, detail: Nội dung văn bản có thể được thêm vào để hiển thị kèm theo.
-🛠️ Trong thư mục utils/
-Services.js: Đây là file quan trọng nhất dùng để kết nối và tương tác với smart contract (smc).
-Bao gồm các hàm (functions) để gọi các phương thức trên smart contract.
-Chứa các biến khởi tạo để lưu thông tin kết nối với smc:
-abi: Nơi lưu trữ nội dung của file JSON ABI (lấy từ thư mục constract).
-contractAddress: Địa chỉ duy nhất của smart contract sau khi được deploy (triển khai) lên blockchain.
-wsURL: Sử dụng địa chỉ WebSocket (ws) để thiết lập kết nối liên tục với smart contract.
-Lưu ý quan trọng: Để đăng nhập ứng dụng và sử dụng các chức năng liên quan đến smart contract, bạn cần phải có private key của ví Metamask của mình.
+Cài đặt & Chạy dự án
+
+Ghi chú
+
+🚀 Giới thiệu
+Tên dự án: Dapp BookFood
+Mục tiêu:
+Ứng dụng phi tập trung (Dapp) cho phép người dùng đặt món ăn, lưu trữ đơn hàng trên blockchain thông qua smart contract.
+
+📂 Cấu trúc thư mục
+graphql
+Copy
+Edit
+src/
+├── assets/         # File animation và hình ảnh động
+├── constract/      # File JSON ABI của smart contract
+├── context/        # Global state sử dụng Redux
+├── cpns/           # Các component con tái sử dụng
+├── layout/         # Các layout của page
+├── page/           # Các page chính của dự án
+├── router/         # Cấu hình router
+├── scss/           # Các file SCSS
+├── utils/          # Các function hỗ trợ dự án
+🛠️ Chi tiết Component
+Trong thư mục cpns/:
+
+BlockFood/
+
+Hiển thị thông tin món ăn.
+
+Props:
+
+food: danh sách món ăn
+
+widthImage, heightImage: kích thước hình ảnh
+
+highlight (boolean): block nổi bật
+
+btn (boolean): hiển thị nút bấm
+
+BtnBack/
+
+Hiển thị nút quay lại.
+
+BtnConfirm/
+
+Hiển thị nút submit xác nhận.
+
+Carousel/
+
+Hiển thị danh sách thức ăn dạng trượt ngang.
+
+Props:
+
+listfood: danh sách món ăn
+
+text, detail: nội dung tùy chỉnh thêm
+
+🛠️ Chi tiết Service
+Trong thư mục utils/:
+
+Services.js
+
+Chịu trách nhiệm kết nối với Smart Contract (SMC).
+
+Các thành phần:
+
+abi: file JSON ABI (từ constract/)
+
+contractAddress: địa chỉ smart contract
+
+wsURL: URL kết nối WebSocket
+
+Yêu cầu: Private key từ ví MetaMask để đăng nhập và giao dịch.
+
+💻 Yêu cầu hệ thống
+Node.js >= 18.x
+
+Metamask Extension
+
+Trình duyệt hỗ trợ Web3 (Chrome, Brave, ...)
+
+🛠️ Cài đặt & Chạy dự án
+bash
+Copy
+Edit
+# Clone dự án
+git clone https://github.com/your-username/dapp-bookfood.git
+
+# Cài đặt dependencies
+cd dapp-bookfood
+npm install
+
+# Chạy ứng dụng
+npm run dev
+⚡ Ghi chú
+Luôn kiểm tra lại địa chỉ contractAddress sau mỗi lần deploy smart contract mới.
+
+Private key phải được bảo mật, không commit lên GitHub.
+
+Dự án kết nối blockchain thông qua WebSocket (wsURL) nên cần mạng ổn định.
