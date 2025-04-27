@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+dapp bookfood
+1. Tổng quan dự án
+Đây là dự án dapp (ứng dụng phi tập trung) có tên là dapp bookfood.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+2. Cấu trúc thư mục
+Cấu trúc thư mục của dự án như sau:
 
-## Available Scripts
+Src/
+├── assets/         # Chứa file animation, chứa ảnh động.
+├── constract/      # Chứa file json abi của smc (smart contract).
+├── context/        # Chứa file redux lưu các global state của dự án.
+├── cpns/           # Chứa các code component con tái sử dụng.
+├── layout/         # Chứa file layout của các page hiện có.
+├── page/           # Chứa các file page chính của dự án.
+├── router/         # Chứa file config route.
+├── scss/           # Chứa các file scss.
+└── utils/          # Chứa các file function hỗ trợ dự án.
+3. Mô tả một số file component
+Trong thư mục cpns/
+BlockFood: Hiển thị cấu trúc hiển thị thông tin food.
 
-In the project directory, you can run:
+Nhận vào:
+food: Danh sách food.
+widthImage, heightImage: Độ dài và cao của image.
+hightlight (boolean): Cần hiển thị block đặc biệt.
+btn (boolean): Cần hiển thị nút bấm.
+BtnBack: Hiển thị nút bấm trở về.
 
-### `npm start`
+BtnConfirm: Hiển thị nút submit.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Carousel: Hiển thị danh sách thức ăn có thể trượt.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Nhận vào:
+listfood: Danh sách cần hiển thị.
+text, detail: Phần nội dung có thể thêm để hiển thị.
+Trong thư mục utils/
+Services.js: Nơi kết nối với smc (smart contract), chứa các hàm để gọi smc, các biến khởi tạo để lưu thông tin kết nối với smc:
+abi: Nơi lưu file json abi (file trong thư mục constract).
+contractAddress: Chuỗi địa chỉ được tạo ra khi deploy smc.
+wsURL: Sử dụng địa chỉ ws để kết nối smc.
+Lưu ý: Cần private key của ví Metamask để đăng nhập ứng dụng và sử dụng.
