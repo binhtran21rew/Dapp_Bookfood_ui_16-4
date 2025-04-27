@@ -98,3 +98,4 @@ Cấu trúc thư mục của dự án được tổ chức như sau:
         - `wsURL`: Sử dụng **địa chỉ WebSocket (ws)** để thiết lập kết nối liên tục với smart contract.
     - **Lưu ý:** Để đăng nhập ứng dụng và sử dụng các chức năng liên quan đến smart contract, bạn **cần phải có private key của ví Metamask** của mình.
 
+---
